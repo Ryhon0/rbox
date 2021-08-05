@@ -6,7 +6,7 @@ using System.Linq;
 [Library( "gravgun" )]
 public partial class GravGun : Carriable
 {
-	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
+	public override string ViewModelPath => "weapons/okphys/ok.vmdl";
 
 	private PhysicsBody holdBody;
 	private WeldJoint holdJoint;
@@ -41,15 +41,23 @@ public partial class GravGun : Carriable
 		SetInteractsAs( CollisionLayer.Debris );
 	}
 
+	[Net]
+	bool IsHolding { get; set; }
 	public override void Simulate( Client client )
 	{
 		if ( Owner is not Player owner ) return;
+
+		if ( ViewModelEntity != null )
+		{
+			ViewModelEntity.SetAnimBool( "grab", IsHolding );
+		}
 
 		if ( !IsServer )
 			return;
 
 		using ( Prediction.Off() )
 		{
+			IsHolding = HeldBody.IsValid();
 			var eyePos = owner.EyePos;
 			var eyeRot = owner.EyeRot;
 			var eyeDir = owner.EyeRot.Forward;

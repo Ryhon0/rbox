@@ -35,8 +35,8 @@
 
 			using ( Prediction.Off() )
 			{
-				bool useRope = Input.Pressed( InputButton.Attack1 );
-				if ( !useRope && !Input.Pressed( InputButton.Attack2 ) )
+				bool useRope = Input.Down( InputButton.Duck );
+				if ( !Input.Pressed( InputButton.Attack1 ) && !Input.Pressed( InputButton.Attack2 ) )
 					return;
 
 				var startPos = Owner.EyePos;
@@ -67,7 +67,9 @@
 					LinearAttenuation = 0.0f,
 					QuadraticAttenuation = 1.0f,
 					Brightness = 1,
-					Color = Color.Random,
+					Color = Input.Pressed( InputButton.Attack2 )
+						? (Owner as SandboxPlayer).PlayerColor
+						: Color.Random
 				};
 
 				light.UseFogNoShadows();

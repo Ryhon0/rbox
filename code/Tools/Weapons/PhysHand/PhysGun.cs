@@ -1,4 +1,4 @@
-using Sandbox;
+﻿using Sandbox;
 using Sandbox.Joints;
 using System;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Linq;
 [Library( "physgun" )]
 public partial class PhysGun : Carriable
 {
-	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
+	public override string ViewModelPath => "weapons/okphys/ok.vmdl";
 
 	protected PhysicsBody holdBody;
 	protected WeldJoint holdJoint;
@@ -34,20 +34,34 @@ public partial class PhysGun : Carriable
 	[Net] public Vector3 GrabbedPos { get; set; }
 
 	public PhysicsBody HeldBody => heldBody;
+	[Net, Predicted]
+	TimeSince TimeSincePull { get; set}
+	bool PullForward;
 
 	public override void Spawn()
 	{
 		base.Spawn();
-
-		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
-
-		CollisionGroup = CollisionGroup.Weapon;
-		SetInteractsAs( CollisionLayer.Debris );
 	}
 
 	public override void Simulate( Client client )
 	{
 		if ( Owner is not Player owner ) return;
+
+		// 👌
+		if ( ViewModelEntity != null )
+		{
+			ViewModelEntity.SetAnimBool( "grab", GrabbedEntity.IsValid() );
+			ViewModelEntity.SetAnimBool( "rotate", Input.Down( InputButton.Use ) );
+
+			if ( Input.MouseWheel != 0 )
+			{
+				TimeSincePull = 0;
+				PullForward = Input.MouseWheel > 0;
+			}
+
+			ViewModelEntity.SetAnimBool( "pull", TimeSincePull < 0.1f );
+			ViewModelEntity.SetAnimBool( "pull_forward", PullForward );
+		}
 
 		var eyePos = owner.EyePos;
 		var eyeDir = owner.EyeRot.Forward;
@@ -283,7 +297,7 @@ public partial class PhysGun : Carriable
 			holdBody = null;
 		}
 
-		KillEffects();
+		// KillEffects();
 	}
 
 	public override void ActiveStart( Entity ent )

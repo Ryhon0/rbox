@@ -6,6 +6,8 @@ partial class SandboxPlayer : Player
 	private TimeSince timeSinceJumpReleased;
 
 	private DamageInfo lastDamage;
+	[Net]
+	public Color PlayerColor { get; set; } = Color.Cyan;
 
 	[Net] public PawnController VehicleController { get; set; }
 	[Net] public PawnAnimator VehicleAnimator { get; set; }

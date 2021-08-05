@@ -2,7 +2,7 @@
 using System;
 
 [Library( "ent_drone", Title = "Drone", Spawnable = true )]
-public partial class DroneEntity : Prop
+public partial class DroneEntity : Prop, IUse
 {
 	public virtual float altitudeAcceleration => 2000;
 	public virtual float movementAcceleration => 5000;
@@ -97,11 +97,21 @@ public partial class DroneEntity : Prop
 
 		using ( Prediction.Off() )
 		{
+			if ( Input.Pressed( InputButton.Use ) )
+			{
+				if ( owner.Pawn is SandboxPlayer player && !player.IsUseDisabled() )
+				{
+					RemoveDriver( player );
+
+					return;
+				}
+			}
+
 			currentInput.Reset();
 			var x = (Input.Down( InputButton.Forward ) ? -1 : 0) + (Input.Down( InputButton.Back ) ? 1 : 0);
 			var y = (Input.Down( InputButton.Right ) ? 1 : 0) + (Input.Down( InputButton.Left ) ? -1 : 0);
 			currentInput.movement = new Vector3( x, y, 0 ).Normal;
-			currentInput.throttle = (Input.Down( InputButton.Run ) ? 1 : 0) + (Input.Down( InputButton.Duck ) ? -1 : 0);
+			currentInput.throttle = (Input.Down( InputButton.Run ) | Input.Down( InputButton.Jump ) ? 1 : 0) + (Input.Down( InputButton.Duck ) ? -1 : 0);
 			currentInput.yaw = -Input.MouseDelta.x;
 		}
 	}
@@ -141,6 +151,49 @@ public partial class DroneEntity : Prop
 			var transform = Transform.ToWorld( new Transform( turbinePositions[i] * Scale, Rotation.From( new Angles( 0, spinAngle, 0 ) ) ) );
 			transform.Scale = Scale;
 			SetBoneTransform( i, transform );
+		}
+	}
+
+	[Net]
+	Entity Driver { get; set; }
+	public bool OnUse( Entity user )
+	{
+		if ( user is SandboxPlayer player && player.Vehicle == null )
+		{
+			player.Vehicle = this;
+			player.VehicleController = new DroneController();
+			player.VehicleCamera = new BehindCamera();
+			player.Animator = null;
+
+			Driver = player;
+		}
+
+		return true;
+	}
+
+	public bool IsUsable( Entity user )
+	{
+		return Driver == null;
+	}
+
+	private void RemoveDriver( SandboxPlayer player )
+	{
+		Driver = null;
+		player.Vehicle = null;
+		player.VehicleController = null;
+		player.Animator = new StandardPlayerAnimator();
+		player.VehicleCamera = null;
+		player.Parent = null;
+		player.PhysicsBody.Enabled = true;
+	}
+
+	protected override void OnDestroy()
+	{
+		base.OnDestroy();
+
+		if ( Driver is SandboxPlayer player )
+		{
+			RemoveDriver( player );
 		}
 	}
 }

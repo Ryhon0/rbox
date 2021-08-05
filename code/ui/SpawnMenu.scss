@@ -40,7 +40,7 @@
                 transform: scale( 1 );
                 opacity: 1;
                 color: #fff;
-                //	background-color: #fff;//( #3273eb, 0.2 );
+                //  background-color: #fff;//( #3273eb, 0.2 );
                 //color: #3273eb;
             }
         }
@@ -69,12 +69,24 @@
         transition: all 0.3s ease-in;
 
         .body {
-            //	background-color: rgba( #333, 0.95 );
+            //  background-color: rgba( #333, 0.95 );
             flex-grow: 1;
             border-radius: 10px;
             background-color: rgba( #111, 0.7 );
             padding: 10px;
 
+            .page {
+                display: none;
+
+                Image {
+                    width: 64px;
+                    height: 64px;
+                }
+
+                &.visible {
+                    display: flex;
+                }
+            }
 
             .toollist {
                 flex-direction: column;
@@ -98,14 +110,16 @@
                     }
                 }
             }
-
-            .inspector {
-                //background-color: rgba( #111, 0.7 );
-                flex-grow: 1;
-                margin-left: 5px;
-                border-radius: 0 3px 3px 0;
-            }
         }
+    }
+}
+
+
+.group {
+    flex-direction: column;
+
+    .groupname {
+        color: #eee;
     }
 }
 

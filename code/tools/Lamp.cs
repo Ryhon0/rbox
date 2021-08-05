@@ -35,7 +35,7 @@
 
 			using ( Prediction.Off() )
 			{
-				if ( !Input.Pressed( InputButton.Attack1 ) )
+				if ( !Input.Pressed( InputButton.Attack1 ) && !Input.Pressed( InputButton.Attack2 ) )
 					return;
 
 				var startPos = Owner.EyePos;
@@ -70,7 +70,9 @@
 					InnerConeAngle = 25,
 					OuterConeAngle = 45,
 					Brightness = 10,
-					Color = Color.Random,
+					Color = Input.Pressed( InputButton.Attack2 )
+						? (Owner as SandboxPlayer).PlayerColor
+						: Color.Random,
 					Rotation = Rotation.Identity
 				};
 

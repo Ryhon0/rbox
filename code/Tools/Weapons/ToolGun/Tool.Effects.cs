@@ -9,6 +9,6 @@ public partial class Tool
 		particle.SetPosition( 0, hitPos );
 		particle.Destroy( false );
 
-		PlaySound( "balloon_pop_cute" );
+		PlaySound( "tool" );
 	}
 }

@@ -8,7 +8,7 @@ partial class SandboxGame : Game
 		if ( IsServer )
 		{
 			// Create the HUD
-			_ = new SandboxHud();
+			_ = new Hud();
 		}
 	}
 

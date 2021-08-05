@@ -1,0 +1,58 @@
+﻿PlayerEditor {
+    width: 420px;
+    height: 100%;
+    flex-grow: 1;
+    justify-items: center;
+    flex-direction: column;
+}
+
+.preview {
+    width: 100%;
+    height: 400px;
+}
+
+.playercolor {
+    flex-direction: column;
+    width: 100%;
+    height: 150px;
+
+    .color {
+        width: 100%;
+        height: 125px;
+        background-color: red;
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+
+        .current {
+            transform: translateX(-50%) translateY(-50%);
+            border: 2px solid white;
+            border-radius: 100%;
+            width: 30px;
+            height: 30px;
+        }
+    }
+
+    Slider {
+        z-index: -100;
+        width: 100%;
+        height: 25px;
+        background: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f, #f00);
+
+        .entry {
+            display: none;
+        }
+
+        .bar {
+            flex-grow: 1;
+        }
+
+        .handle {
+            position: absolute;
+            transform: translateX(-50%);
+            width: 10px;
+            height: 100%;
+            border: 3px solid white;
+        }
+    }
+}

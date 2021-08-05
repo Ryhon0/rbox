@@ -1,6 +1,5 @@
 ﻿using Sandbox;
 using System;
-using System.Collections.Generic;
 
 [Library( "ent_car", Title = "Car", Spawnable = true )]
 public partial class CarEntity : Prop, IUse
@@ -286,7 +285,7 @@ public partial class CarEntity : Prop, IUse
 		bool canAirControl = false;
 
 		var v = rotation * localVelocity.WithZ( 0 );
-		var vDelta = MathF.Pow((v.Length / 1000.0f).Clamp( 0, 1 ), 5.0f).Clamp(0, 1);
+		var vDelta = MathF.Pow( (v.Length / 1000.0f).Clamp( 0, 1 ), 5.0f ).Clamp( 0, 1 );
 		if ( vDelta < 0.01f ) vDelta = 0;
 
 		if ( debug_car )
@@ -295,7 +294,7 @@ public partial class CarEntity : Prop, IUse
 			DebugOverlay.Line( body.MassCenter, body.MassCenter + v.Normal * 100, Color.Green, 0, false );
 		}
 
-		var angle = ( rotation.Forward.Normal * MathF.Sign( localVelocity.x )).Normal.Dot( v.Normal ).Clamp( 0.0f, 1.0f );
+		var angle = (rotation.Forward.Normal * MathF.Sign( localVelocity.x )).Normal.Dot( v.Normal ).Clamp( 0.0f, 1.0f );
 		angle = angle.LerpTo( 1.0f, 1.0f - vDelta );
 		grip = grip.LerpTo( angle, 1.0f - MathF.Pow( 0.001f, dt ) );
 
@@ -473,7 +472,7 @@ public partial class CarEntity : Prop, IUse
 			player.VehicleAnimator = new CarAnimator();
 			player.VehicleCamera = new CarCamera();
 			player.Parent = this;
-			player.LocalPosition = Vector3.Up * 10;
+			player.LocalPosition = Vector3.Up * 10 + Vector3.Forward * 10;
 			player.LocalRotation = Rotation.Identity;
 			player.LocalScale = 1;
 			player.PhysicsBody.Enabled = false;

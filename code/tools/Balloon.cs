@@ -41,7 +41,8 @@
 		{
 			if ( previewModel.IsValid() )
 			{
-				previewModel.RenderColor = Tint;
+				previewModel.RenderColor = Input.Down( InputButton.Duck )
+					? (Owner as SandboxPlayer).PlayerColor : Tint;
 			}
 
 			if ( !Host.IsServer )
@@ -78,7 +79,8 @@
 
 				ent.SetModel( "models/citizen_props/balloonregular01.vmdl" );
 				ent.PhysicsBody.GravityScale = -0.2f;
-				ent.RenderColor = Tint;
+				ent.RenderColor = Input.Down( InputButton.Duck )
+					? (Owner as SandboxPlayer).PlayerColor : Tint; ;
 
 				Tint = Color.Random.ToColor32();
 
