@@ -159,7 +159,7 @@ partial class Weapon
 					else
 					{
 						ServerTakeDamage( tr.Entity.NetworkIdent, tr.EndPos,
-							damageInfo.Damage, damageInfo.HitboxIndex, damageInfo.Flags );
+							damageInfo.Damage, damageInfo.Force , damageInfo.HitboxIndex, damageInfo.Flags );
 					}
 				}
 			}
@@ -167,9 +167,10 @@ partial class Weapon
 	}
 
 	[ServerCmd]
-	public static void ServerTakeDamage( int TargetID, Vector3 pos, float damage, int hitbox, DamageFlags flags )
+	public static void ServerTakeDamage( int TargetID, Vector3 pos, float damage, Vector3 force, int hitbox, DamageFlags flags )
 	{
 		Host.AssertServer();
+		Log.Info(TargetID);
 
 		var attacker = ConsoleSystem.Caller.Pawn as Player;
 		var attacked = Entity.All.FirstOrDefault( e => e.NetworkIdent == TargetID );
@@ -179,7 +180,8 @@ partial class Weapon
 			.WithAttacker( attacker )
 			.WithWeapon( attacker.ActiveChild )
 			.WithFlag( flags )
-			.WithHitbox( hitbox );
+			.WithHitbox( hitbox )
+			.WithForce(force);
 
 		attacked.TakeDamage( dmg );
 	}
