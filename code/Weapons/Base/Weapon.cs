@@ -1,33 +1,89 @@
 ﻿using Sandbox;
 
-public partial class Weapon : BaseWeapon, IUse
+public enum CrosshairType
 {
-	public virtual float ReloadTime => 3.0f;
-
-	public PickupTrigger PickupTrigger { get; protected set; }
-
+	Dot,
+	Circle,
+	Sides,
+	None,
+	Cross
+}
+public enum HoldType
+{
+	Unarmed = 0,
+	Pistol = 1,
+	SMG = 2,
+	Shotgun = 3,
+	Universal = 4
+}
+public partial class Weapon : BaseWeapon
+{
+	// Networked variables
+	[Net, Predicted]
+	public int AmmoClip { get; set; }
 	[Net, Predicted]
 	public TimeSince TimeSinceReload { get; set; }
-
 	[Net, Predicted]
 	public bool IsReloading { get; set; }
-
 	[Net, Predicted]
 	public TimeSince TimeSinceDeployed { get; set; }
 
-	public override void Spawn()
+	// Ammo
+	public virtual int ClipSize => 1;
+	public virtual bool ReloadMagazine => true;
+	public virtual float ReloadTime => 2f;
+	public virtual int AmmoType => 0;
+
+	// Projectile specific
+	public virtual string Projectile => null;
+	public virtual float ProjectileSpeed => 1000;
+
+	// Hitscan specific
+	public virtual float BulletSize => IsMelee ? 50f : 1f;
+	public virtual float Range => IsMelee ? 75 : 5000;
+
+	// Stats
+	public virtual bool IsMelee => false;
+	public virtual float Force => 0.5f;
+	public virtual float Damage => 10f;
+	public virtual DamageFlags DamageFlags => DamageFlags.Bullet;
+	public virtual bool IsAutomatic => true;
+	public virtual int BulletsPerShot => 1;
+	public virtual float Spread => 0.1f;
+	public virtual int RPM => 600;
+	public virtual float AttackInterval => 60f / RPM;
+	public virtual float DeployTime => .75f;
+
+	// Burst fire
+	public virtual int ShotsPerTriggerPull => 1;
+	public virtual float BurstRPM => RPM;
+	public virtual float BurstInterval => 60f / BurstRPM;
+
+	// Audio/Visual
+	public virtual HoldType HoldType => HoldType.Pistol;
+	public virtual CrosshairType CrosshairType => CrosshairType.Dot;
+	public virtual string ShootShound => "rust_pistol.shoot";
+	public virtual string WorldModelPath => "weapons/rust_pistol/rust_pistol.vmdl";
+	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
+	public virtual string MuzzleFlash => "particles/pistol_muzzleflash.vpcf";
+	public virtual string Brass => "particles/pistol_ejectbrass.vpcf";
+
+	public int AvailableAmmo
 	{
-		base.Spawn();
-
-		PickupTrigger = new PickupTrigger
+		get
 		{
-			Parent = this,
-			Position = Position,
-			EnableTouch = true,
-			EnableSelfCollisions = false
-		};
+			if ( Owner is PlayerWithAmmo p )
+				return p.AmmoCount( AmmoType );
 
-		PickupTrigger.PhysicsBody.EnableAutoSleeping = false;
+			return ClipSize;
+		}
+		set
+		{
+			if ( Owner is PlayerWithAmmo p )
+			{
+				p.SetAmmo( AmmoType, value );
+			}
+		}
 	}
 
 	public override void ActiveStart( Entity ent )
@@ -35,29 +91,74 @@ public partial class Weapon : BaseWeapon, IUse
 		base.ActiveStart( ent );
 
 		TimeSinceDeployed = 0;
+		IsReloading = false;
 	}
-
-	public override void Reload()
+	public override void Spawn()
 	{
-		if ( IsReloading )
+		base.Spawn();
+
+		if ( WorldModelPath != null )
+			SetModel( WorldModelPath );
+
+		AmmoClip = ClipSize;
+	}
+	public override void CreateViewModel()
+	{
+		Host.AssertClient();
+
+		if ( string.IsNullOrEmpty( ViewModelPath ) )
 			return;
 
-		TimeSinceReload = 0;
-		IsReloading = true;
-
-		(Owner as AnimEntity)?.SetAnimBool( "b_reload", true );
-
-		StartReloadEffects();
+		ViewModelEntity = new GGViewModel();
+		ViewModelEntity.Position = Position;
+		ViewModelEntity.Owner = Owner;
+		ViewModelEntity.EnableViewmodelRendering = true;
+		ViewModelEntity.SetModel( ViewModelPath );
 	}
-
 	public override void Simulate( Client owner )
 	{
-		if ( TimeSinceDeployed < 0.6f )
+		ViewModelEntity?.SetAnimBool( "empty", AmmoClip <= 0 );
+
+		if ( TimeSinceDeployed < DeployTime )
 			return;
 
-		if ( !IsReloading )
+		if ( ReloadMagazine ? !IsReloading : true )
 		{
-			base.Simulate( owner );
+			{
+				if ( CanReload() )
+				{
+					Reload();
+				}
+
+				//
+				// Reload could have deleted us
+				//
+				if ( !this.IsValid() )
+					return;
+
+				if ( CanPrimaryAttack() )
+				{
+					AttackPrimary();
+					TimeSincePrimaryAttack = 0;
+				}
+
+				//
+				// AttackPrimary could have deleted us
+				//
+				if ( !owner.IsValid() )
+					return;
+
+				if ( CanSecondaryAttack() )
+				{
+					AttackSecondary();
+					TimeSinceSecondaryAttack = 0;
+				}
+			}
+
+			if ( ClipSize == 1 && TimeSincePrimaryAttack > AttackInterval )
+			{
+				Reload();
+			}
 		}
 
 		if ( IsReloading && TimeSinceReload > ReloadTime )
@@ -66,137 +167,18 @@ public partial class Weapon : BaseWeapon, IUse
 		}
 	}
 
-	public virtual void OnReloadFinish()
+	public override void CreateHudElements()
 	{
-		IsReloading = false;
+		if ( Local.Hud == null ) return;
+
+		CrosshairPanel = new Crosshair();
+		CrosshairPanel.Parent = Local.Hud;
+		CrosshairPanel.AddClass( CrosshairType.ToString().ToLower() );
 	}
 
-	[ClientRpc]
-	public virtual void StartReloadEffects()
+	public override void SimulateAnimator( PawnAnimator anim )
 	{
-		ViewModelEntity?.SetAnimBool( "reload", true );
-
-		// TODO - player third person model reload
-	}
-
-	public override void CreateViewModel()
-	{
-		Host.AssertClient();
-
-		if ( string.IsNullOrEmpty( ViewModelPath ) )
-			return;
-
-		ViewModelEntity = new ViewModel
-		{
-			Position = Position,
-			Owner = Owner,
-			EnableViewmodelRendering = true
-		};
-
-		ViewModelEntity.SetModel( ViewModelPath );
-	}
-
-	public bool OnUse( Entity user )
-	{
-		if ( Owner != null )
-			return false;
-
-		if ( !user.IsValid() )
-			return false;
-
-		user.StartTouch( this );
-
-		return false;
-	}
-
-	public virtual bool IsUsable( Entity user )
-	{
-		if ( Owner != null ) return false;
-
-		if ( user.Inventory is Inventory inventory )
-		{
-			return inventory.CanAdd( this );
-		}
-
-		return true;
-	}
-
-	public void Remove()
-	{
-		PhysicsGroup?.Wake();
-		Delete();
-	}
-
-	[ClientRpc]
-	protected virtual void ShootEffects()
-	{
-		Host.AssertClient();
-
-		Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
-
-		if ( IsLocalPawn )
-		{
-			_ = new Sandbox.ScreenShake.Perlin();
-		}
-
-		ViewModelEntity?.SetAnimBool( "fire", true );
-		CrosshairPanel?.CreateEvent( "fire" );
-	}
-
-	/// <summary>
-	/// Shoot a single bullet
-	/// </summary>
-	public virtual void ShootBullet( Vector3 pos, Vector3 dir, float spread, float force, float damage, float bulletSize )
-	{
-		var forward = dir;
-		forward += (Vector3.Random + Vector3.Random + Vector3.Random + Vector3.Random) * spread * 0.25f;
-		forward = forward.Normal;
-
-		//
-		// ShootBullet is coded in a way where we can have bullets pass through shit
-		// or bounce off shit, in which case it'll return multiple results
-		//
-		foreach ( var tr in TraceBullet( pos, pos + forward * 5000, bulletSize ) )
-		{
-			tr.Surface.DoBulletImpact( tr );
-
-			if ( !IsServer ) continue;
-			if ( !tr.Entity.IsValid() ) continue;
-
-			//
-			// We turn predictiuon off for this, so any exploding effects don't get culled etc
-			//
-			using ( Prediction.Off() )
-			{
-				var damageInfo = DamageInfo.FromBullet( tr.EndPos, forward * 100 * force, damage )
-					.UsingTraceResult( tr )
-					.WithAttacker( Owner )
-					.WithWeapon( this );
-
-				tr.Entity.TakeDamage( damageInfo );
-			}
-		}
-	}
-
-	/// <summary>
-	/// Shoot a single bullet from owners view point
-	/// </summary>
-	public virtual void ShootBullet( float spread, float force, float damage, float bulletSize )
-	{
-		ShootBullet( Owner.EyePos, Owner.EyeRot.Forward, spread, force, damage, bulletSize );
-	}
-
-	/// <summary>
-	/// Shoot a multiple bullets from owners view point
-	/// </summary>
-	public virtual void ShootBullets( int numBullets, float spread, float force, float damage, float bulletSize )
-	{
-		var pos = Owner.EyePos;
-		var dir = Owner.EyeRot.Forward;
-
-		for ( int i = 0; i < numBullets; i++ )
-		{
-			ShootBullet( pos, dir, spread, force / numBullets, damage, bulletSize );
-		}
+		anim.SetParam( "holdtype", (int)HoldType ); // TODO this is shit
+		anim.SetParam( "aimat_weight", 1.0f );
 	}
 }

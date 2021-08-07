@@ -5,6 +5,8 @@ partial class SandboxGame : Game
 {
 	public SandboxGame()
 	{
+		Crosshair.UseReloadTimer = true;
+		Weapon.UseClientSideHitreg = true;
 		if ( IsServer )
 		{
 			// Create the HUD

@@ -61,6 +61,11 @@ partial class Flashlight : Weapon
 		return light;
 	}
 
+	public override void AttackPrimary()
+	{
+		
+	}
+
 	public override void Simulate( Client cl )
 	{
 		if ( cl == null )

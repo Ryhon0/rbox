@@ -1,102 +1,36 @@
 ﻿using Sandbox;
+using System;
 
-public class ViewModel : BaseViewModel
+partial class GGViewModel : BaseViewModel
 {
-	protected float SwingInfluence => 0.05f;
-	protected float ReturnSpeed => 5.0f;
-	protected float MaxOffsetLength => 10.0f;
-	protected float BobCycleTime => 7;
-	protected Vector3 BobDirection => new Vector3( 0.0f, 1.0f, 0.5f );
-
-	private Vector3 swingOffset;
-	private float lastPitch;
-	private float lastYaw;
-	private float bobAnim;
-
-	private bool activated = false;
+	float walkBob = 0;
 
 	public override void PostCameraSetup( ref CameraSetup camSetup )
 	{
 		base.PostCameraSetup( ref camSetup );
 
-		if ( !Local.Pawn.IsValid() )
-			return;
+		// camSetup.ViewModelFieldOfView = camSetup.FieldOfView + (FieldOfView - 80);
 
-		if ( !activated )
-		{
-			lastPitch = camSetup.Rotation.Pitch();
-			lastYaw = camSetup.Rotation.Yaw();
-
-			activated = true;
-		}
-
-		Position = camSetup.Position;
-		Rotation = camSetup.Rotation;
-
-		camSetup.ViewModel.FieldOfView = FieldOfView;
-
-		var playerVelocity = Local.Pawn.Velocity;
-
-		if ( Local.Pawn is Player player )
-		{
-			var controller = player.GetActiveController();
-			if ( controller != null && controller.HasTag( "noclip" ) )
-			{
-				playerVelocity = Vector3.Zero;
-			}
-		}
-
-		var newPitch = Rotation.Pitch();
-		var newYaw = Rotation.Yaw();
-
-		var pitchDelta = Angles.NormalizeAngle( newPitch - lastPitch );
-		var yawDelta = Angles.NormalizeAngle( lastYaw - newYaw );
-
-		var verticalDelta = playerVelocity.z * Time.Delta;
-		var viewDown = Rotation.FromPitch( newPitch ).Up * -1.0f;
-		verticalDelta *= (1.0f - System.MathF.Abs( viewDown.Cross( Vector3.Down ).y ));
-		pitchDelta -= verticalDelta * 1;
-
-		var offset = CalcSwingOffset( pitchDelta, yawDelta );
-		offset += CalcBobbingOffset( playerVelocity );
-
-		Position += Rotation * offset;
-
-		lastPitch = newPitch;
-		lastYaw = newYaw;
+		AddCameraEffects( ref camSetup );
 	}
 
-	protected Vector3 CalcSwingOffset( float pitchDelta, float yawDelta )
+	private void AddCameraEffects( ref CameraSetup camSetup )
 	{
-		Vector3 swingVelocity = new Vector3( 0, yawDelta, pitchDelta );
+		Rotation = Local.Pawn.EyeRot;
 
-		swingOffset -= swingOffset * ReturnSpeed * Time.Delta;
-		swingOffset += (swingVelocity * SwingInfluence);
+		//
+		// Bob up and down based on our walk movement
+		//
+		var speed = Owner.Velocity.Length.LerpInverse( 0, 320 );
+		var left = camSetup.Rotation.Left;
+		var up = camSetup.Rotation.Up;
 
-		if ( swingOffset.Length > MaxOffsetLength )
+		if ( Owner.GroundEntity != null )
 		{
-			swingOffset = swingOffset.Normal * MaxOffsetLength;
+			walkBob += Time.Delta * 25.0f * speed;
 		}
 
-		return swingOffset;
-	}
-
-	protected Vector3 CalcBobbingOffset( Vector3 velocity )
-	{
-		bobAnim += Time.Delta * BobCycleTime;
-
-		var twoPI = System.MathF.PI * 2.0f;
-
-		if ( bobAnim > twoPI )
-		{
-			bobAnim -= twoPI;
-		}
-
-		var speed = new Vector2( velocity.x, velocity.y ).Length;
-		speed = speed > 10.0 ? speed : 0.0f;
-		var offset = BobDirection * (speed * 0.005f) * System.MathF.Cos( bobAnim );
-		offset = offset.WithZ( -System.MathF.Abs( offset.z ) );
-
-		return offset;
+		Position += up * MathF.Sin( walkBob ) * speed * -1;
+		Position += left * MathF.Sin( walkBob * 0.6f ) * speed * -0.5f;
 	}
 }
