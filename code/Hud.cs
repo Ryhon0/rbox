@@ -8,17 +8,18 @@ public partial class Hud : HudEntity<RootPanel>
 		if ( !IsClient )
 			return;
 
-		RootPanel.StyleSheet.Load( "/ui/Hud.scss" );
+		RootPanel.StyleSheet.Load( "/Hud.scss" );
 
 		RootPanel.AddChild<NameTags>();
 		RootPanel.AddChild<CrosshairCanvas>();
-		RootPanel.AddChild<ChatBox>();
 		RootPanel.AddChild<VoiceList>();
-		RootPanel.AddChild<KillFeed>();
 		RootPanel.AddChild<Scoreboard>();
 		RootPanel.AddChild<Health>();
 		RootPanel.AddChild<InventoryBar>();
 		RootPanel.AddChild<CurrentTool>();
 		RootPanel.AddChild<SpawnMenu>();
+
+		RootPanel.AddChild<ClassicChatBox>();
+		RootPanel.AddChild<KillFeed>();
 	}
 }

@@ -1,7 +1,7 @@
 ﻿Health {
     position: absolute;
-    background-color: rgba( black, 0.5 );
-    right: 100px;
+    backdrop-filter: blur(10px);
+    left: 100px;
     bottom: 48px;
     font-size: 40px;
     font-weight: bold;
@@ -28,7 +28,7 @@ CurrentTool {
     .title {
         font-size: 50px;
         font-weight: bold;
-        text-shadow: 4px 4px 10px rgba( black, 0.3 );
+        //text-shadow: 4px 4px 10px rgba( black, 0.3 );
         color: white;
     }
 
@@ -37,7 +37,7 @@ CurrentTool {
         padding-left: 10px;
         font-size: 18px;
         font-weight: normal;
-        text-shadow: 2px 2px 5px rgba( black, 0.3 );
+        //text-shadow: 2px 2px 5px rgba( black, 0.3 );
         color: white;
         opacity: 0.8;
     }
@@ -70,7 +70,6 @@ InventoryBar {
 InventoryIcon {
     width: 80px;
     height: 80px;
-    background-color: rgba( #fff, 0.0 );
     margin: 0px 2px;
     position: relative;
     transition: all 0.2s ease-in-out;
@@ -89,7 +88,7 @@ InventoryIcon {
         bottom: 0;
         opacity: 0.7;
         transition: all 0.5s ease-in-out;
-        text-shadow: 1px 1px 5px black;
+        //text-shadow: 1px 1px 5px black;
     }
 
     .slot-number {

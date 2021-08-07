@@ -81,8 +81,10 @@ public partial class SpawnMenu : Panel
 							ConsoleSystem.Run( "tool_current", entry.Name );
 							ConsoleSystem.Run( "inventory_current", "weapon_tool" );
 
-							foreach ( var child in list.Children )
+							foreach ( var child in list.Descendants )
+							{
 								child.SetClass( "active", child == button );
+							}
 						} );
 					}
 				}

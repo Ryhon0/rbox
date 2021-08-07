@@ -34,8 +34,7 @@ public partial class PhysGun : Carriable
 	[Net] public Vector3 GrabbedPos { get; set; }
 
 	public PhysicsBody HeldBody => heldBody;
-	[Net, Predicted]
-	TimeSince TimeSincePull { get; set}
+	TimeSince TimeSincePull { get; set; }
 	bool PullForward;
 
 	public override void Spawn()
@@ -59,7 +58,7 @@ public partial class PhysGun : Carriable
 				PullForward = Input.MouseWheel > 0;
 			}
 
-			ViewModelEntity.SetAnimBool( "pull", TimeSincePull < 0.1f );
+			ViewModelEntity.SetAnimBool( "pull", TimeSincePull < 0.5f );
 			ViewModelEntity.SetAnimBool( "pull_forward", PullForward );
 		}
 

@@ -34,6 +34,7 @@ public class ColorPicker : Panel
 			Value = Value.WithHue( HueSlider.Value * 360 );
 			UpdateColor();
 		} );
+		HueSlider.Value = 0;
 	}
 
 	Rect oldSize;
@@ -79,6 +80,8 @@ public class ColorPicker : Panel
 		=> CreateColorTexture( (int)size.width, (int)size.height, hue );
 	Texture CreateColorTexture( int w, int h, float hue = 0 )
 	{
+		if ( w <= 0 || h <= 0 ) return null;
+
 		var hsv = new ColorHsv( hue, 1, 1 );
 		var img = new byte[w * h * 4];
 

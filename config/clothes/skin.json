@@ -1,0 +1,81 @@
+[
+    // Citizen default
+    {
+        "model": "models/citizen/citizen.vmdl",
+        "material": 0,
+        "bodyMask": 31
+    },
+    // Citizen 02
+    {
+        "model": "models/citizen/citizen.vmdl",
+        "material": 1,
+        "bodyMask": 31
+    },
+    // Citizen 03
+    {
+        "model": "models/citizen/citizen.vmdl",
+        "material": 2,
+        "bodyMask": 31
+    },
+    // Citizen 04
+    {
+        "model": "models/citizen/citizen.vmdl",
+        "material": 3,
+        "bodyMask": 31
+    },
+    // Citizen 05
+    {
+        "model": "models/citizen/citizen.vmdl",
+        "material": 4,
+        "bodyMask": 31
+    },
+    // Skeleman
+    {
+        // Needs the citizen model because has no animations
+        "model": "models/citizen/citizen.vmdl",
+        "children": [
+            {
+                "model": "models/skeleman.vmdl",
+                "material": 0
+            }
+        ],
+        "material": 0,
+        "bodyMask": 0
+    },
+    // Skeleman charred
+    {
+        "model": "models/citizen/citizen.vmdl",
+        "children": [
+            {
+                "model": "models/skeleman.vmdl",
+                "material": 1
+            }
+        ],
+        "material": 3,
+        "bodyMask": 0
+    },
+    // Skeleman bleeched
+    {
+        "model": "models/citizen/citizen.vmdl",
+        "children": [
+            {
+                "model": "models/skeleman.vmdl",
+                "material": 2
+            }
+        ],
+        "material": 0,
+        "bodyMask": 0
+    },
+    // Skeleman bloody
+    {
+        "model": "models/citizen/citizen.vmdl",
+        "children": [
+            {
+                "model": "models/skeleman.vmdl",
+                "material": 3
+            }
+        ],
+        "material": 0,
+        "bodyMask": 0
+    }
+]
