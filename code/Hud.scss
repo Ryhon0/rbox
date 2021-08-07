@@ -76,6 +76,8 @@ InventoryIcon {
     margin-top: 10px;
     font-family: poppins;
     backdrop-filter: blur(10px);
+    background-position: center;
+    background-size: contain;
 
     .item-name {
         padding: 5px;

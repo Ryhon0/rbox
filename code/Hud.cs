@@ -20,6 +20,9 @@ public partial class Hud : HudEntity<RootPanel>
 		RootPanel.AddChild<SpawnMenu>();
 
 		RootPanel.AddChild<ClassicChatBox>();
-		RootPanel.AddChild<KillFeed>();
+		RootPanel.AddChild<RKillFeed>();
+
+		RootPanel.AddChild<DamageIndicator>();
+		RootPanel.AddChild<HitIndicator>();
 	}
 }

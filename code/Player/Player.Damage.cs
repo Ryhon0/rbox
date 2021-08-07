@@ -10,8 +10,9 @@ using System.Threading.Tasks;
 	DamageInfo LastDamage;
 
 	[ClientRpc]
-	public void TookDamage( DamageFlags damageFlags, Vector3 forcePos, Vector3 force )
+	public void TookDamage( Vector3 forcePos )
 	{
+		DamageIndicator.Current?.OnHit( forcePos );
 	}
 
 	public override void TakeDamage( DamageInfo info )
@@ -20,7 +21,7 @@ using System.Threading.Tasks;
 
 		if ( info.Attacker != null )
 		{
-			//if ( !(info.Weapon as Weapon)?.IsMelee ?? false )
+			if ( !(info.Weapon as Weapon)?.IsMelee ?? false )
 			{
 				// Check for headshot
 				if ( info.HitboxIndex == 5 )
@@ -28,7 +29,6 @@ using System.Threading.Tasks;
 					info.Damage *= 2.0f;
 				}
 			}
-			/*
 			else
 			{
 				// Check for backstab
@@ -37,19 +37,25 @@ using System.Threading.Tasks;
 				var dot = facing.Dot( attackedfrom );
 				if ( dot > 0 ) info.Damage *= 2;
 			}
-			*/
 		}
 
 		base.TakeDamage( info );
 
-		/*
-		if ( info.Attacker is Player attacker && attacker != this )
+		if ( info.Attacker is SandboxPlayer attacker && attacker != this )
 		{
 			// Note - sending this only to the attacker!
 			attacker.DidDamage( To.Single( attacker ), info.Position, info.Damage, Health.LerpInverse( 100, 0 ) );
 
-			TookDamage( To.Single( this ), info.Weapon.IsValid() ? info.Weapon.Position : info.Attacker.Position );
+			TookDamage( To.Single( this ), info.Weapon.IsValid() ? info.Weapon.Position : info.Attacker.Position);
 		}
-		*/
+	}
+
+	[ClientRpc]
+	public void DidDamage( Vector3 pos, float amount, float healthinv )
+	{
+		Sound.FromScreen( "dm.ui_attacker" )
+			.SetPitch( 1 + healthinv * 1 );
+
+		HitIndicator.Current?.OnHit( pos, amount );
 	}
 }
