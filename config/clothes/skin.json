@@ -35,7 +35,7 @@
         "model": "models/citizen/citizen.vmdl",
         "children": [
             {
-                "model": "models/skeleman.vmdl",
+                "model": "models/skeleton/skeleman.vmdl",
                 "material": 0
             }
         ],
@@ -47,7 +47,7 @@
         "model": "models/citizen/citizen.vmdl",
         "children": [
             {
-                "model": "models/skeleman.vmdl",
+                "model": "models/skeleton/skeleman.vmdl",
                 "material": 1
             }
         ],
@@ -59,7 +59,7 @@
         "model": "models/citizen/citizen.vmdl",
         "children": [
             {
-                "model": "models/skeleman.vmdl",
+                "model": "models/skeleton/skeleman.vmdl",
                 "material": 2
             }
         ],
@@ -71,7 +71,7 @@
         "model": "models/citizen/citizen.vmdl",
         "children": [
             {
-                "model": "models/skeleman.vmdl",
+                "model": "models/skeleton/skeleman.vmdl",
                 "material": 3
             }
         ],

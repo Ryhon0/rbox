@@ -74,7 +74,7 @@
 						[
 							{
 								from = ""
-								to = "materials/skeleman.vmat"
+								to = "models/skeleton/materials/skeleman.vmat"
 							},
 						]
 						use_global_default = false
@@ -87,7 +87,11 @@
 						[
 							{
 								from = "materials/skeleman.vmat"
-								to = "materials/skelemanchar.vmat"
+								to = "models/skeleton/materials/skelemanchar.vmat"
+							},
+							{
+								from = "models/skeleton/materials/skeleman.vmat"
+								to = "models/skeleton/materials/skelemanchar.vmat"
 							},
 						]
 					},
@@ -98,7 +102,11 @@
 						[
 							{
 								from = "materials/skeleman.vmat"
-								to = "materials/skelemanbleeched.vmat"
+								to = "models/skeleton/materials/skelemanbleeched.vmat"
+							},
+							{
+								from = "models/skeleton/materials/skeleman.vmat"
+								to = "models/skeleton/materials/skelemanbleeched.vmat"
 							},
 						]
 					},
@@ -109,7 +117,11 @@
 						[
 							{
 								from = "materials/skeleman.vmat"
-								to = "materials/skelemanbloody.vmat"
+								to = "models/skeleton/materials/skelemanbloody.vmat"
+							},
+							{
+								from = "models/skeleton/materials/skeleman.vmat"
+								to = "models/skeleton/materials/skelemanbloody.vmat"
 							},
 						]
 					},
@@ -953,7 +965,7 @@
 						recenter_on_parent_bone = false
 						offset_origin = [ 0.0, 0.0, 0.0 ]
 						offset_angles = [ 0.0, 0.0, 0.0 ]
-						filename = "models/rawstuffhere/collisions/cube.004.fbx"
+						filename = "models/skeleton/collisions/cube.004.fbx"
 						import_scale = 0.3937
 						faceMergeAngle = 10.0
 						maxHullVertices = 0
@@ -973,7 +985,7 @@
 						recenter_on_parent_bone = false
 						offset_origin = [ 0.0, 0.0, 0.0 ]
 						offset_angles = [ 0.0, 0.0, 0.0 ]
-						filename = "models/rawstuffhere/collisions/cube.003.fbx"
+						filename = "models/skeleton/collisions/cube.003.fbx"
 						import_scale = 0.3937
 						faceMergeAngle = 10.0
 						maxHullVertices = 0
@@ -993,7 +1005,7 @@
 						recenter_on_parent_bone = false
 						offset_origin = [ 0.0, 0.0, 0.0 ]
 						offset_angles = [ 0.0, 0.0, 0.0 ]
-						filename = "models/rawstuffhere/collisions/cube.002.fbx"
+						filename = "models/skeleton/collisions/cube.002.fbx"
 						import_scale = 0.3937
 						faceMergeAngle = 10.0
 						maxHullVertices = 0
@@ -1013,7 +1025,7 @@
 						recenter_on_parent_bone = false
 						offset_origin = [ 0.0, 0.0, 0.0 ]
 						offset_angles = [ 0.0, 0.0, 0.0 ]
-						filename = "models/rawstuffhere/collisions/cube.fbx"
+						filename = "models/skeleton/collisions/cube.fbx"
 						import_scale = 0.3937
 						faceMergeAngle = 10.0
 						maxHullVertices = 0
@@ -1033,7 +1045,7 @@
 						recenter_on_parent_bone = false
 						offset_origin = [ 0.0, 0.0, 0.0 ]
 						offset_angles = [ 0.0, 0.0, 0.0 ]
-						filename = "models/rawstuffhere/collisions/cube.013.fbx"
+						filename = "models/skeleton/collisions/cube.013.fbx"
 						import_scale = 0.3937
 						faceMergeAngle = 10.0
 						maxHullVertices = 0
@@ -1053,7 +1065,7 @@
 						recenter_on_parent_bone = false
 						offset_origin = [ 0.0, 0.0, 0.0 ]
 						offset_angles = [ 0.0, 0.0, 0.0 ]
-						filename = "models/rawstuffhere/collisions/cube.012.fbx"
+						filename = "models/skeleton/collisions/cube.012.fbx"
 						import_scale = 0.3937
 						faceMergeAngle = 10.0
 						maxHullVertices = 0
@@ -1073,7 +1085,7 @@
 						recenter_on_parent_bone = false
 						offset_origin = [ 0.0, 0.0, 0.0 ]
 						offset_angles = [ 0.0, 0.0, 0.0 ]
-						filename = "models/rawstuffhere/collisions/cube.005.fbx"
+						filename = "models/skeleton/collisions/cube.005.fbx"
 						import_scale = 0.3937
 						faceMergeAngle = 10.0
 						maxHullVertices = 0
@@ -1093,7 +1105,7 @@
 						recenter_on_parent_bone = false
 						offset_origin = [ 0.0, 0.0, 0.0 ]
 						offset_angles = [ 0.0, 0.0, 0.0 ]
-						filename = "models/rawstuffhere/collisions/cube.009.fbx"
+						filename = "models/skeleton/collisions/cube.009.fbx"
 						import_scale = 0.3937
 						faceMergeAngle = 10.0
 						maxHullVertices = 0
@@ -1113,7 +1125,7 @@
 						recenter_on_parent_bone = false
 						offset_origin = [ 0.0, 0.0, 0.0 ]
 						offset_angles = [ 0.0, 0.0, 0.0 ]
-						filename = "models/rawstuffhere/collisions/cube.010.fbx"
+						filename = "models/skeleton/collisions/cube.010.fbx"
 						import_scale = 0.3937
 						faceMergeAngle = 10.0
 						maxHullVertices = 0
@@ -1133,7 +1145,7 @@
 						recenter_on_parent_bone = false
 						offset_origin = [ 0.0, 0.0, 0.0 ]
 						offset_angles = [ 0.0, 0.0, 0.0 ]
-						filename = "models/rawstuffhere/collisions/cube.011.fbx"
+						filename = "models/skeleton/collisions/cube.011.fbx"
 						import_scale = 0.3937
 						faceMergeAngle = 10.0
 						maxHullVertices = 0
@@ -1153,7 +1165,7 @@
 						recenter_on_parent_bone = false
 						offset_origin = [ 0.0, 0.0, 0.0 ]
 						offset_angles = [ 0.0, 0.0, 0.0 ]
-						filename = "models/rawstuffhere/collisions/cube.014.fbx"
+						filename = "models/skeleton/collisions/cube.014.fbx"
 						import_scale = 0.3937
 						faceMergeAngle = 10.0
 						maxHullVertices = 0
@@ -1173,7 +1185,7 @@
 						recenter_on_parent_bone = false
 						offset_origin = [ 0.0, 0.0, 0.0 ]
 						offset_angles = [ 0.0, 0.0, 0.0 ]
-						filename = "models/rawstuffhere/collisions/cube.015.fbx"
+						filename = "models/skeleton/collisions/cube.015.fbx"
 						import_scale = 0.3937
 						faceMergeAngle = 10.0
 						maxHullVertices = 0
@@ -1193,7 +1205,7 @@
 						recenter_on_parent_bone = false
 						offset_origin = [ 0.0, 0.0, 0.0 ]
 						offset_angles = [ 0.0, 0.0, 0.0 ]
-						filename = "models/rawstuffhere/collisions/cube.016.fbx"
+						filename = "models/skeleton/collisions/cube.016.fbx"
 						import_scale = 0.3937
 						faceMergeAngle = 10.0
 						maxHullVertices = 0
@@ -1213,7 +1225,7 @@
 						recenter_on_parent_bone = false
 						offset_origin = [ 0.0, 0.0, 0.0 ]
 						offset_angles = [ 0.0, 0.0, 0.0 ]
-						filename = "models/rawstuffhere/collisions/cube.006.fbx"
+						filename = "models/skeleton/collisions/cube.006.fbx"
 						import_scale = 0.3937
 						faceMergeAngle = 10.0
 						maxHullVertices = 0
@@ -1233,7 +1245,7 @@
 						recenter_on_parent_bone = false
 						offset_origin = [ 0.0, 0.0, 0.0 ]
 						offset_angles = [ 0.0, 0.0, 0.0 ]
-						filename = "models/rawstuffhere/collisions/cube.007.fbx"
+						filename = "models/skeleton/collisions/cube.007.fbx"
 						import_scale = 0.3937
 						faceMergeAngle = 10.0
 						maxHullVertices = 0
@@ -1253,7 +1265,7 @@
 						recenter_on_parent_bone = false
 						offset_origin = [ 0.0, 0.0, 0.0 ]
 						offset_angles = [ 0.0, 0.0, 0.0 ]
-						filename = "models/rawstuffhere/collisions/cube.008.fbx"
+						filename = "models/skeleton/collisions/cube.008.fbx"
 						import_scale = 0.3937
 						faceMergeAngle = 10.0
 						maxHullVertices = 0
