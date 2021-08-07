@@ -12,10 +12,10 @@ public partial class EntityList : Panel
 	public EntityList()
 	{
 		AddClass( "spawnpage" );
-		AddChild( out Canvas, "canvas" );
+		AddChild( out Canvas, "canvas entities" );
 
 		Canvas.Layout.AutoColumns = true;
-		Canvas.Layout.ItemSize = new Vector2( 100, 100 );
+		Canvas.Layout.ItemSize = new Vector2( 100, 125 );
 		Canvas.OnCreateCell = ( cell, data ) =>
 		{
 			var entry = (LibraryAttribute)data;

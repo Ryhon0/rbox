@@ -154,6 +154,12 @@
         margin: 10px;
         border-radius: 5px;
 
+        &.entities {
+            .cell {
+                padding-bottom: 25px;
+            }
+        }
+
         .cell {
             padding: 5px;
         }
