@@ -5,7 +5,6 @@ partial class SandboxPlayer : Player
 	private TimeSince timeSinceDropped;
 	private TimeSince timeSinceJumpReleased;
 
-	private DamageInfo lastDamage;
 	[Net]
 	public Color PlayerColor { get; set; } = Color.Cyan;
 
@@ -59,54 +58,6 @@ partial class SandboxPlayer : Player
 		Inventory.Add( new Flashlight() );
 
 		base.Respawn();
-	}
-
-	public override void OnKilled()
-	{
-		base.OnKilled();
-
-		if ( lastDamage.Flags.HasFlag( DamageFlags.Vehicle ) )
-		{
-			Particles.Create( "particles/impact.flesh.bloodpuff-big.vpcf", lastDamage.Position );
-			Particles.Create( "particles/impact.flesh-big.vpcf", lastDamage.Position );
-			PlaySound( "kersplat" );
-		}
-
-		VehicleController = null;
-		VehicleAnimator = null;
-		VehicleCamera = null;
-		Vehicle = null;
-
-		BecomeRagdollOnClient( Velocity, lastDamage.Flags, lastDamage.Position, lastDamage.Force, GetHitboxBone( lastDamage.HitboxIndex ) );
-		LastCamera = MainCamera;
-		MainCamera = new SpectateRagdollCamera();
-		Camera = MainCamera;
-		Controller = null;
-
-		EnableAllCollisions = false;
-		EnableDrawing = false;
-
-		Inventory.DropActive();
-		Inventory.DeleteContents();
-	}
-
-	public override void TakeDamage( DamageInfo info )
-	{
-		if ( GetHitboxGroup( info.HitboxIndex ) == 1 )
-		{
-			info.Damage *= 10.0f;
-		}
-
-		lastDamage = info;
-
-		TookDamage( lastDamage.Flags, lastDamage.Position, lastDamage.Force );
-
-		base.TakeDamage( info );
-	}
-
-	[ClientRpc]
-	public void TookDamage( DamageFlags damageFlags, Vector3 forcePos, Vector3 force )
-	{
 	}
 
 	public override PawnController GetActiveController()
