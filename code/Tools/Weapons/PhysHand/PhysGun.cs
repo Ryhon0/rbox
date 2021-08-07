@@ -3,7 +3,7 @@ using Sandbox.Joints;
 using System;
 using System.Linq;
 
-[Library( "physgun" )]
+[Library( "physgun", Title = "PhysHand")]
 public partial class PhysGun : Carriable
 {
 	public override string ViewModelPath => "weapons/okphys/ok.vmdl";
@@ -65,10 +65,17 @@ public partial class PhysGun : Carriable
 		var eyePos = owner.EyePos;
 		var eyeDir = owner.EyeRot.Forward;
 		var eyeRot = Rotation.From( new Angles( 0.0f, owner.EyeRot.Angles().yaw, 0.0f ) );
+		if ( Owner is AnimEntity ae )
+		{
+			ae.SetAnimInt( "holdtype", 4 );
+
+			if (GrabbedEntity.IsValid()) ae.SetAnimFloat( "holdtype_pose_hand", 0.2f );
+			else ae.SetAnimFloat( "holdtype_pose_hand", 0.14f );
+		}
 
 		if ( Input.Pressed( InputButton.Attack1 ) )
 		{
-			(Owner as AnimEntity)?.SetAnimBool( "b_attack", true );
+			//(Owner as AnimEntity)?.SetAnimBool( "b_attack", true );
 
 			if ( !grabbing )
 				grabbing = true;

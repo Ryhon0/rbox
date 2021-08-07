@@ -18,6 +18,7 @@ public class InventoryIcon : Panel
 
 	public void Clear()
 	{
+		Style.SetBackgroundImage("");
 		Label.Text = "";
 		SetClass( "active", false );
 	}

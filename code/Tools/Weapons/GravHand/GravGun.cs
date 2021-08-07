@@ -3,7 +3,7 @@ using Sandbox.Joints;
 using System;
 using System.Linq;
 
-[Library( "gravgun" )]
+[Library( "gravgun", Title = "GravHand")]
 public partial class GravGun : Carriable
 {
 	public override string ViewModelPath => "weapons/okphys/ok.vmdl";
@@ -35,8 +35,6 @@ public partial class GravGun : Carriable
 	{
 		base.Spawn();
 
-		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
-
 		CollisionGroup = CollisionGroup.Weapon;
 		SetInteractsAs( CollisionLayer.Debris );
 	}
@@ -50,6 +48,13 @@ public partial class GravGun : Carriable
 		if ( ViewModelEntity != null )
 		{
 			ViewModelEntity.SetAnimBool( "grab", IsHolding );
+		}
+		if ( Owner is AnimEntity ae )
+		{
+			ae.SetAnimInt( "holdtype", 4 );
+
+			if ( HeldBody.IsValid() ) ae.SetAnimFloat( "holdtype_pose_hand", 0.2f );
+			else ae.SetAnimFloat( "holdtype_pose_hand", 0.14f );
 		}
 
 		if ( !IsServer )
@@ -81,7 +86,7 @@ public partial class GravGun : Carriable
 						HeldBody.ApplyImpulse( eyeDir * (HeldBody.Mass * ThrowForce) );
 						HeldBody.ApplyAngularImpulse( Vector3.Random * (HeldBody.Mass * ThrowForce) );
 					}
-
+					(Owner as AnimEntity)?.SetAnimBool( "b_attack", true );
 					GrabEnd();
 				}
 				else if ( Input.Pressed( InputButton.Attack2 ) )
@@ -124,6 +129,7 @@ public partial class GravGun : Carriable
 			{
 				if ( tr.Distance < MaxPushDistance && !IsBodyGrabbed( body ) )
 				{
+					
 					var pushScale = 1.0f - Math.Clamp( tr.Distance / MaxPushDistance, 0.0f, 1.0f );
 					body.ApplyImpulseAt( tr.EndPos, eyeDir * (body.Mass * (PushForce * pushScale)) );
 				}

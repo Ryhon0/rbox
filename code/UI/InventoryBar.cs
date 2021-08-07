@@ -38,7 +38,11 @@ public class InventoryBar : Panel
 		}
 
 		inventoryIcon.TargetEnt = ent;
+		var oldtext = inventoryIcon.Label.Text;
 		inventoryIcon.Label.Text = ent.ClassInfo.Title;
+		// Prevents laggy transitions
+		if ( inventoryIcon.Label.Text != oldtext) 
+			inventoryIcon.Style.SetBackgroundImage($"/ui/weapons/{ent.ClassInfo.Name}.png");
 		inventoryIcon.SetClass( "active", ent.IsActiveChild() );
 	}
 
