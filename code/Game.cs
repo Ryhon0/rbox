@@ -37,13 +37,12 @@ partial class SandboxGame : Game
 		var tr = Trace.Ray( owner.EyePos, owner.EyePos + owner.EyeRot.Forward * 500 )
 			.UseHitboxes()
 			.Ignore( owner )
-			.Size( 2 )
 			.Run();
 
 		var ent = new Prop();
-		ent.Position = tr.EndPos;
 		ent.Rotation = Rotation.From( new Angles( 0, owner.EyeRot.Angles().yaw, 0 ) ) * Rotation.FromAxis( Vector3.Up, 180 );
 		ent.SetModel( modelname );
+		ent.Position = tr.EndPos - Vector3.Up * ent.CollisionBounds.Mins.z;
 
 		// Drop to floor
 		if ( ent.PhysicsBody != null && ent.PhysicsGroup.BodyCount == 1 )
