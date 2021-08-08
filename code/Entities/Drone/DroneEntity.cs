@@ -45,6 +45,8 @@ public partial class DroneEntity : Prop, IUse
 			return;
 		}
 
+		if ( Driver == null ) return;
+
 		var body = PhysicsBody;
 		var transform = Transform;
 
@@ -143,8 +145,11 @@ public partial class DroneEntity : Prop, IUse
 	[Event.Frame]
 	public void OnFrame()
 	{
-		spinAngle += 10000.0f * Time.Delta;
-		spinAngle %= 360.0f;
+		if ( Driver != null )
+		{
+			spinAngle += 10000.0f * Time.Delta;
+			spinAngle %= 360.0f;
+		}
 
 		for ( int i = 0; i < turbinePositions.Length; ++i )
 		{
