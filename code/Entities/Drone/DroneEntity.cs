@@ -166,6 +166,7 @@ public partial class DroneEntity : Prop, IUse
 			player.Animator = null;
 
 			Driver = player;
+			StartSounds();
 		}
 
 		return true;
@@ -185,6 +186,7 @@ public partial class DroneEntity : Prop, IUse
 		player.VehicleCamera = null;
 		player.Parent = null;
 		player.PhysicsBody.Enabled = true;
+		StopSounds();
 	}
 
 	protected override void OnDestroy()
@@ -195,5 +197,12 @@ public partial class DroneEntity : Prop, IUse
 		{
 			RemoveDriver( player );
 		}
+	}
+
+	public override void TakeDamage( DamageInfo info )
+	{
+		base.TakeDamage( info );
+
+		PlaySound( "drone-hit" );
 	}
 }
