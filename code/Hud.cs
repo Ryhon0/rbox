@@ -3,10 +3,13 @@ using Sandbox.UI;
 
 public partial class Hud : HudEntity<RootPanel>
 {
+	public static Hud Current;
 	public Hud()
 	{
 		if ( !IsClient )
 			return;
+
+		Current = this;
 
 		RootPanel.StyleSheet.Load( "/Hud.scss" );
 
