@@ -162,7 +162,7 @@ public partial class DroneEntity : Prop, IUse
 		{
 			player.Vehicle = this;
 			player.VehicleController = new DroneController();
-			player.VehicleCamera = new BehindCamera();
+			player.VehicleCamera = new DroneCamera();
 			player.Animator = null;
 
 			Driver = player;
