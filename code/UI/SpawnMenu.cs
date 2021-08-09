@@ -9,6 +9,7 @@ using System.Linq;
 public partial class SpawnMenu : Panel
 {
 	public static SpawnMenu Instance;
+	public Panel ToolList;
 
 	public SpawnMenu()
 	{
@@ -59,35 +60,8 @@ public partial class SpawnMenu : Panel
 			{
 				var player = body.AddChild<PlayerEditor>( "page visible" );
 
-				var list = body.Add.Panel( "page toollist" );
-				{
-					var tools = Library.GetAllAttributes<Sandbox.Tools.BaseTool>().Where( t => t.Title != "BaseTool" );
-					var groupnames = tools.Select( t => t.Group ).Distinct();
-					Dictionary<string, Panel> groups = new();
-					foreach ( var g in groupnames )
-					{
-						var p = list.Add.Panel( "group" );
-						groups[g] = p;
-						p.Add.Label( g, "groupname" );
-					}
-
-					foreach ( var entry in tools )
-					{
-						var button = groups[entry.Group].Add.Button( entry.Title );
-						button.SetClass( "active", entry.Name == ConsoleSystem.GetValue( "tool_current" ) );
-
-						button.AddEventListener( "onclick", () =>
-						{
-							ConsoleSystem.Run( "tool_current", entry.Name );
-							ConsoleSystem.Run( "inventory_current", "weapon_tool" );
-
-							foreach ( var child in list.Descendants )
-							{
-								child.SetClass( "active", child == button );
-							}
-						} );
-					}
-				}
+				ToolList = body.Add.Panel( "page toollist" );
+				ReloadTools();
 			}
 		}
 
@@ -100,4 +74,35 @@ public partial class SpawnMenu : Panel
 		Parent.SetClass( "spawnmenuopen", Input.Down( InputButton.Menu ) );
 	}
 
+	[Event.Hotload]
+	void ReloadTools()
+	{
+		ToolList.DeleteChildren();
+		var tools = Library.GetAllAttributes<Sandbox.Tools.BaseTool>().Where( t => t.Title != "BaseTool" );
+		var groupnames = tools.Select( t => t.Group ).Distinct().OrderBy( g => g );
+		Dictionary<string, Panel> groups = new();
+		foreach ( var g in groupnames )
+		{
+			var p = ToolList.Add.Panel( "group" );
+			groups[g] = p;
+			p.Add.Label( g, "groupname" );
+		}
+
+		foreach ( var entry in tools )
+		{
+			var button = groups[entry.Group].Add.Button( entry.Title );
+			button.SetClass( "active", entry.Name == ConsoleSystem.GetValue( "tool_current" ) );
+
+			button.AddEventListener( "onclick", () =>
+			{
+				ConsoleSystem.Run( "tool_current", entry.Name );
+				ConsoleSystem.Run( "inventory_current", "weapon_tool" );
+
+				foreach ( var child in ToolList.Descendants )
+				{
+					child.SetClass( "active", child == button );
+				}
+			} );
+		}
+	}
 }
