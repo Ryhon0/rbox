@@ -12,6 +12,14 @@ public partial class EntityList : Panel
 	public EntityList()
 	{
 		AddClass( "spawnpage" );
+		Reload();
+	}
+
+	[Event.Hotload]
+	void Reload()
+	{
+		Canvas?.Delete();
+
 		AddChild( out Canvas, "canvas entities" );
 
 		Canvas.Layout.AutoColumns = true;
@@ -22,9 +30,16 @@ public partial class EntityList : Panel
 			var btn = cell.Add.Button( entry.Title );
 			btn.AddClass( "icon" );
 			btn.AddEventListener( "onclick", () => ConsoleSystem.Run( "spawn_entity", entry.Name ) );
+
+			var entityicon = $"/entity/{entry.Name}.png";
+			var weaponicon = $"/ui/weapons/{entry.Name}.png";
+			string icn = "";
+			if ( FileSystem.Mounted.FileExists( entityicon ) ) icn = entityicon;
+			else if ( FileSystem.Mounted.FileExists( weaponicon ) ) icn = weaponicon;
+
 			btn.Style.Background = new PanelBackground
 			{
-				Texture = Texture.Load( $"/entity/{entry.Name}.png", false )
+				Texture = Texture.Load( icn, false )
 			};
 		};
 
