@@ -1,8 +1,9 @@
 ﻿namespace Sandbox.Tools
 {
-	[Library( "tool_balloon", Title = "Balloons", Description = "Create Balloons!", Group = "construction" )]
+	[Library( "tool_balloon", Title = "Balloons", Description = "Create Balloons!", Group = "balloons" )]
 	public partial class BalloonTool : BaseTool
 	{
+		public virtual string BalloonModelPath => "models/citizen_props/balloonregular01.vmdl";
 		[Net]
 		public Color32 Tint { get; set; }
 
@@ -31,7 +32,7 @@
 
 		public override void CreatePreviews()
 		{
-			if ( TryCreatePreview( ref previewModel, "models/citizen_props/balloonregular01.vmdl" ) )
+			if ( TryCreatePreview( ref previewModel, BalloonModelPath ) )
 			{
 				previewModel.RelativeToNormal = false;
 			}
@@ -72,12 +73,10 @@
 				if ( tr.Entity is BalloonEntity )
 					return;
 
-				var ent = new BalloonEntity
-				{
-					Position = tr.EndPos,
-				};
+				var ent = CreateBalloon();
+				ent.Position = tr.EndPos;
 
-				ent.SetModel( "models/citizen_props/balloonregular01.vmdl" );
+				ent.SetModel( BalloonModelPath );
 				ent.PhysicsBody.GravityScale = -0.2f;
 				ent.RenderColor = Input.Down( InputButton.Duck )
 					? (Owner as SandboxPlayer).PlayerColor : Tint; ;
@@ -121,5 +120,8 @@
 				} );
 			}
 		}
+
+		public virtual BalloonEntity CreateBalloon()
+			=> new BalloonEntity();
 	}
 }
