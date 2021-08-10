@@ -515,7 +515,7 @@ public partial class CarEntity : Prop, IUse
 				Entity = player,
 				Pos = player.Position + Vector3.Up * 50,
 				Velocity = velocity,
-				PreVelocity = velocity,
+				PreVelocity = velocity * 20.0f, // I don't know why the ragdolls now need more force
 				PostVelocity = velocity,
 				PreAngularVelocity = angularVelocity,
 				Speed = speed,
@@ -554,6 +554,11 @@ public partial class CarEntity : Prop, IUse
 					.WithAttacker( driver != null ? driver : this, driver != null ? this : null )
 					.WithPosition( eventData.Pos )
 					.WithForce( eventData.PreVelocity ) );
+
+				if ( eventData.Entity.LifeState == LifeState.Dead && eventData.Entity is not SandboxPlayer )
+				{
+					PhysicsBody.Velocity = eventData.PreVelocity;
+				}
 			}
 		}
 	}
