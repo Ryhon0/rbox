@@ -36,6 +36,15 @@ partial class SandboxGame : Game
 		}
 	}
 
+	public override void ClientDisconnect( Client c, NetworkDisconnectionReason reason )
+	{
+		base.ClientDisconnect( c, reason );
+
+		var us = Undo.GetUndos( c );
+		foreach ( var u in us ) u.DoUndo();
+		Undo.Undos.Remove( c );
+	}
+
 	protected override void OnDestroy()
 	{
 		base.OnDestroy();
