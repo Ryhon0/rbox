@@ -155,6 +155,15 @@ partial class SandboxPlayer : Player
 		base.StartTouch( other );
 	}
 
+	protected override void StopUsing()
+	{
+		if ( Using is IStopUsing use )
+		{
+			use.OnStopUsing( this );
+		}
+		base.StopUsing();
+	}
+
 	[ServerCmd( "inventory_current" )]
 	public static void SetInventoryCurrent( string entName )
 	{
