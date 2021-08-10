@@ -134,7 +134,7 @@ partial class SandboxGame : Game
 	public static void ShowUndo( string message )
 	{
 		Sound.FromScreen( "undo" );
-		Log.Info( message );
+		ClassicChatBox.AddInformation( message, "/ui/undo.png" );
 	}
 
 	[ClientCmd( "garry" )]
