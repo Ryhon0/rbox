@@ -76,12 +76,15 @@
 
 					#endregion Position
 
-					PhysicsJoint.Revolute
+					var j = PhysicsJoint.Revolute
 						.From( body1 )
 						.To( body2 )
 						.WithPivot( tr.EndPos )
 						.WithBasis( Rotation.LookAt( tr.Normal ) * Rotation.From( new Angles( 90, 0, 0 ) ) )
 						.Create();
+
+					if ( Host.IsServer )
+						Undo.Add( Owner.GetClientOwner(), new PhysicsJointUndo( j ) );
 
 					body1.PhysicsGroup?.Wake();
 					body2.PhysicsGroup?.Wake();

@@ -76,11 +76,14 @@
 
 					#endregion Position
 
-					PhysicsJoint.Spherical
+					var j = PhysicsJoint.Spherical
 						.From( body1 )
 						.To( body2 )
 						.WithPivot( tr.EndPos )
 						.Create();
+
+					if ( Host.IsServer )
+						Undo.Add( Owner.GetClientOwner(), new PhysicsJointUndo( j ) );
 
 					body1.PhysicsGroup?.Wake();
 					body2.PhysicsGroup?.Wake();

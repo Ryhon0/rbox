@@ -89,6 +89,9 @@
 						.WithCollisionsEnabled()
 						.Create();
 
+					if ( Host.IsServer )
+						Undo.Add( Owner.GetClientOwner(), new PhysicsJointUndo( slider ) );
+
 					slider.OnBreak( () =>
 					{
 						rope?.Destroy();

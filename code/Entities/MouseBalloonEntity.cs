@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-[Library( "ent_mouseballoon", Title = "Mouse sBalloon", Spawnable = true )]
+[Library( "ent_mouseballoon", Title = "Mouse Balloon", Spawnable = true )]
 public partial class MouseBalloonEntity : BalloonEntity
 {
 	public override void Spawn()

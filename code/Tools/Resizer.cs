@@ -48,8 +48,8 @@ namespace Sandbox.Tools
 						if ( !child.IsValid() )
 							continue;
 
-						child.PhysicsGroup.RebuildMass();
-						child.PhysicsGroup.Wake();
+						child.PhysicsGroup?.RebuildMass();
+						child.PhysicsGroup?.Wake();
 					}
 				}
 

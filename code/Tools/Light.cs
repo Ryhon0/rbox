@@ -77,6 +77,9 @@
 				light.SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
 				light.Position = tr.EndPos + -light.CollisionBounds.Center + tr.Normal * light.CollisionBounds.Size * 0.5f;
 
+				if ( Host.IsServer )
+					Undo.Add( Owner.GetClientOwner(), new EntityUndo( light ) );
+
 				if ( !useRope )
 					return;
 

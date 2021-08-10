@@ -101,7 +101,7 @@ partial class SandboxGame : Game
 		ent.Position = tr.EndPos;
 		ent.Rotation = Rotation.From( new Angles( 0, owner.EyeRot.Angles().yaw, 0 ) );
 
-		//Log.Info( $"ent: {ent}" );
+		Undo.Add( ConsoleSystem.Caller, new EntityUndo( ent ) );
 	}
 
 	public override void DoPlayerNoclip( Client player )

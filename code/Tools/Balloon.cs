@@ -83,6 +83,9 @@
 
 				Tint = Color.Random.ToColor32();
 
+				if ( Host.IsServer )
+					Undo.Add( Owner.GetClientOwner(), new EntityUndo( ent ) );
+
 				if ( !useRope )
 					return;
 
@@ -118,6 +121,9 @@
 					rope?.Destroy( true );
 					spring.Remove();
 				} );
+
+				if ( Host.IsServer )
+					Undo.Add( Owner.GetClientOwner(), new EntityUndo( ent ) );
 			}
 		}
 

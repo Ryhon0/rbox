@@ -45,6 +45,8 @@
 					else
 					{
 						target.Weld( rootProp );
+						if ( Host.IsServer )
+							Undo.Add( Owner.GetClientOwner(), new WeldUndo( target ) ); ;
 						target = null;
 					}
 				}

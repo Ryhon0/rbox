@@ -42,10 +42,13 @@
 						return;
 					}
 
-					PhysicsJoint.Generic
+					var j = PhysicsJoint.Generic
 						.From( body )
 						.To( tr.Body )
 						.Create();
+
+					if ( Host.IsServer )
+						Undo.Add( Owner.GetClientOwner(), new PhysicsJointUndo( j ) );
 
 					body.PhysicsGroup?.Wake();
 					tr.Body.PhysicsGroup?.Wake();

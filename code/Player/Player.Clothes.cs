@@ -11,14 +11,14 @@ partial class SandboxPlayer
 	bool dressed = false;
 
 	BodyMask BodyMask = BodyMask.All;
-	void ApplyBodyMask( BodyMask mask)
+	void ApplyBodyMask( BodyMask mask )
 	{
 		BodyMask = BodyMask & mask;
 
 		if ( BodyMask == 0 )
 		{
-			for(int i=0; i<4; i++ )
-				SetBodyGroup( i,  0 );
+			for ( int i = 0; i < 4; i++ )
+				SetBodyGroup( i, 0 );
 			RenderAlpha = 0;
 		}
 		else
@@ -59,7 +59,7 @@ partial class SandboxPlayer
 				"models/citizen_clothes/shoes/shorts.cargo.vmdl",
 			} );
 
-			pants = Wear(model);
+			pants = Wear( model );
 
 			//ApplyBodyMask( BodyMask.Chest | BodyMask.Head);
 		}
@@ -74,7 +74,7 @@ partial class SandboxPlayer
 				"models/citizen_clothes/jacket/jacket_heavy.vmdl",
 			} );
 
-			jacket = Wear( model);
+			jacket = Wear( model );
 		}
 
 		if ( true )
@@ -109,17 +109,17 @@ partial class SandboxPlayer
 				"models/citizen_clothes/hat/hat_woollybobble.vmdl",
 			} );
 
-			hat = Wear(model);
-			hat.Tags.Add("hat");
+			hat = Wear( model );
+			hat.Tags.Add( "hat" );
 		}
 	}
-	
-	public void Wear(Clothing clothing, ClothingSlot slot)
+
+	public void Wear( Clothing clothing, ClothingSlot slot )
 	{
-		if(slot == ClothingSlot.Skin)
+		if ( slot == ClothingSlot.Skin )
 		{
 			SetModel( clothing.Model );
-			SetMaterialGroup(clothing.Material);
+			SetMaterialGroup( clothing.Material );
 			if ( clothing.Colorable )
 			{
 				Tags.Add( "colorable" );
@@ -132,33 +132,33 @@ partial class SandboxPlayer
 			}
 
 			if ( clothing.Children != null )
-			foreach ( var c in clothing.Children)
-			{
-				var m = new ModelEntity(c.Model);
-				m.Tags.Add("clothing");
-				m.EnableShadowInFirstPerson = true;
-				m.EnableHideInFirstPerson = true;
-
-
-				if ( c.AttachmentPoint == null ) m.SetParent( this, true );
-				else m.SetParent(this, c.AttachmentPoint);
-
-				if ( c.CopyMaterial ) m.SetMaterialGroup( GetMaterialGroup() );
-				else m.SetMaterialGroup( c.Material );
-
-				if ( c.Colorable )
+				foreach ( var c in clothing.Children )
 				{
-					m.Tags.Add("colorable" );
-					m.RenderColor = PlayerColor;
-				}
-				else
-				{
-					m.RenderColor = Color.White;
-					m.Tags.Remove( "colorable" );
-				}
+					var m = new ModelEntity( c.Model );
+					m.Tags.Add( "clothing" );
+					m.EnableShadowInFirstPerson = true;
+					m.EnableHideInFirstPerson = true;
 
-				ApplyBodyMask( c.BodyMask );
-			}
+
+					if ( c.AttachmentPoint == null ) m.SetParent( this, true );
+					else m.SetParent( this, c.AttachmentPoint );
+
+					if ( c.CopyMaterial ) m.SetMaterialGroup( GetMaterialGroup() );
+					else m.SetMaterialGroup( c.Material );
+
+					if ( c.Colorable )
+					{
+						m.Tags.Add( "colorable" );
+						m.RenderColor = PlayerColor;
+					}
+					else
+					{
+						m.RenderColor = Color.White;
+						m.Tags.Remove( "colorable" );
+					}
+
+					ApplyBodyMask( c.BodyMask );
+				}
 		}
 		else
 		{
@@ -184,36 +184,36 @@ partial class SandboxPlayer
 				m.Tags.Remove( "colorable" );
 			}
 
-			if(clothing.Children != null)
-			foreach ( var c in clothing.Children )
-			{
-				var cm = new ModelEntity( c.Model );
-				cm.Tags.Add( "clothing" );
-				cm.EnableShadowInFirstPerson = true;
-				cm.EnableHideInFirstPerson = true;
-
-				if ( c.AttachmentPoint == null ) cm.SetParent( this, true );
-				else cm.SetParent( this, c.AttachmentPoint );
-
-				if ( c.CopyMaterial ) m.SetMaterialGroup( GetMaterialGroup() );
-				else cm.SetMaterialGroup( c.Material );
-
-				if ( c.Colorable )
+			if ( clothing.Children != null )
+				foreach ( var c in clothing.Children )
 				{
-					cm.Tags.Add( "colorable" );
-					cm.RenderColor = PlayerColor;
-				}
-				else
-				{
-					cm.RenderColor = Color.White;
-					cm.Tags.Remove( "colorable" );
-				}
+					var cm = new ModelEntity( c.Model );
+					cm.Tags.Add( "clothing" );
+					cm.EnableShadowInFirstPerson = true;
+					cm.EnableHideInFirstPerson = true;
 
-				ApplyBodyMask( c.BodyMask );
-			}
+					if ( c.AttachmentPoint == null ) cm.SetParent( this, true );
+					else cm.SetParent( this, c.AttachmentPoint );
+
+					if ( c.CopyMaterial ) m.SetMaterialGroup( GetMaterialGroup() );
+					else cm.SetMaterialGroup( c.Material );
+
+					if ( c.Colorable )
+					{
+						cm.Tags.Add( "colorable" );
+						cm.RenderColor = PlayerColor;
+					}
+					else
+					{
+						cm.RenderColor = Color.White;
+						cm.Tags.Remove( "colorable" );
+					}
+
+					ApplyBodyMask( c.BodyMask );
+				}
 		}
 
-		ApplyBodyMask(clothing.BodyMask);
+		ApplyBodyMask( clothing.BodyMask );
 	}
 
 	public ModelEntity Wear( string path )

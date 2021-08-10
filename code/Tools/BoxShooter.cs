@@ -32,6 +32,9 @@
 
 			ent.SetModel( "models/citizen_props/crate01.vmdl" );
 			ent.Velocity = Owner.EyeRot.Forward * 1000;
+
+			if ( Host.IsServer )
+				Undo.Add( Owner.GetClientOwner(), new EntityUndo( ent ) );
 		}
 	}
 

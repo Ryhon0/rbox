@@ -95,6 +95,9 @@
 				CreateHitEffects( tr.EndPos );
 
 				Reset();
+
+				if ( Host.IsServer )
+					Undo.Add( Owner.GetClientOwner(), new PhysicsJointUndo( spring ) );
 			}
 		}
 

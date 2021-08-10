@@ -1,7 +1,7 @@
 ﻿using Sandbox;
 using Sandbox.Joints;
 
-[Library( "ent_wheel" )]
+[Library( "ent_wheel", Title = "Wheel" )]
 public partial class WheelEntity : Prop
 {
 	public RevoluteJoint Joint;
