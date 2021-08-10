@@ -42,6 +42,15 @@ namespace Sandbox.Tools
 					tr.Entity.Scale = scale;
 					tr.Entity.PhysicsGroup.RebuildMass();
 					tr.Entity.PhysicsGroup.Wake();
+
+					foreach ( var child in tr.Entity.Children )
+					{
+						if ( !child.IsValid() )
+							continue;
+
+						child.PhysicsGroup.RebuildMass();
+						child.PhysicsGroup.Wake();
+					}
 				}
 
 				if ( Input.Pressed( InputButton.Attack1 ) || Input.Pressed( InputButton.Attack2 ) || reset )
