@@ -69,6 +69,7 @@ partial class SandboxGame : Game
 			//DebugOverlay.Line( p, tr.EndPos, 10, false );
 		}
 
+		Undo.Add( ConsoleSystem.Caller, new ModelUndo( ent ) );
 	}
 
 	[ServerCmd( "spawn_entity" )]
@@ -118,6 +119,13 @@ partial class SandboxGame : Game
 				basePlayer.DevController = new NoclipController();
 			}
 		}
+	}
+
+	[ClientRpc]
+	public static void ShowUndo( string message )
+	{
+		Sound.FromScreen( "undo" );
+		Log.Info( message );
 	}
 
 	[ClientCmd( "garry" )]

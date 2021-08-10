@@ -62,6 +62,14 @@ public partial class SpawnMenu : Panel
 
 				ToolList = body.Add.Panel( "page toollist" );
 				ReloadTools();
+
+				var utils = body.Add.Panel( "page util" );
+				{
+					utils.Add.Button( "Undo", () => ConsoleSystem.Run( "undo" ) );
+					utils.Add.Button( "Undo All", () => ConsoleSystem.Run( "undoall" ) );
+					utils.Add.Button( "(Admin) Cleanup", () => ConsoleSystem.Run( "cleanup" ) );
+					utils.Add.Label( "You can call undo/undoall/cleanup from console too!" );
+				}
 			}
 		}
 
