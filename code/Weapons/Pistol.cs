@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-[Library( "pistol", Title = "Pistol", Spawnable = true )]
+[Library( "pistol", Title = "Pistol", Spawnable = true, Group = "Weapons" )]
 public class Pistol : Weapon
 {
 	public override float Damage => 40;

@@ -1,7 +1,7 @@
 ﻿using Sandbox;
 using System.Linq;
 
-[Library( "directional_gravity", Title = "Directional Gravity", Spawnable = true )]
+[Library( "directional_gravity", Title = "Directional Gravity", Spawnable = true, Group = "Construction" )]
 public partial class DirectionalGravity : Prop
 {
 	bool enabled = false;

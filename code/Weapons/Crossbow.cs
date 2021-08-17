@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-[Library( "xbow", Title = "Crossbow", Spawnable = true )]
+[Library( "xbow", Title = "Crossbow", Spawnable = true, Group = "Weapons" )]
 public class Crossbow : Weapon
 {
 	static SoundEvent Attack = new SoundEvent( "weapons/rust_crossbow/sounds/crossbow-attack-1.vsnd" );

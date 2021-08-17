@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-[Library( "finger_gun", Title = "Finger Gun", Spawnable = true )]
+[Library( "finger_gun", Title = "Finger Gun", Spawnable = true, Group = "Weapons" )]
 public class FingerGun : Weapon
 {
 	public static SoundEvent Attack = new SoundEvent( "weapons/finger_guns/pew.vsnd" );

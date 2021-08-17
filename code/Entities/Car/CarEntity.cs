@@ -1,7 +1,7 @@
 ﻿using Sandbox;
 using System;
 
-[Library( "ent_car", Title = "Car", Spawnable = true )]
+[Library( "ent_car", Title = "Car", Spawnable = true, Group = "Vehicles" )]
 public partial class CarEntity : Prop, IUse
 {
 	[ConVar.Replicated( "debug_car" )]

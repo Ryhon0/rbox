@@ -1,7 +1,7 @@
 ﻿using Sandbox;
 using System;
 
-[Library( "ent_drone", Title = "Drone", Spawnable = true )]
+[Library( "ent_drone", Title = "Drone", Spawnable = true, Group = "Vehicles" )]
 public partial class DroneEntity : Prop, IUse
 {
 	public virtual float altitudeAcceleration => 2000;

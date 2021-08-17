@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-[Library( "pipe", Title = "Pipe Shotgun", Spawnable = true )]
+[Library( "pipe", Title = "Pipe Shotgun", Spawnable = true, Group = "Weapons" )]
 public class PipeShotgun : Weapon
 {
 	static SoundEvent Attack = new SoundEvent( "weapons/rust_shotgun/sounds/rust-shotgun-attack.vsnd" );

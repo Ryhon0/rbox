@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-[Library( "ent_thruster", Title = "Thruster" )]
+[Library( "ent_thruster", Title = "Thruster", Group = "Construction" )]
 public partial class ThrusterEntity : Prop, IUse
 {
 	public float Force = 1000.0f;

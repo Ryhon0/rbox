@@ -1,5 +1,5 @@
 ﻿using Sandbox;
-[Library( "chair", Title = "Chair", Spawnable = true )]
+[Library( "chair", Title = "Chair", Spawnable = true, Group = "Vehicles" )]
 public partial class Chair : Prop, IUse
 {
 	[Net]
