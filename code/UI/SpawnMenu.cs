@@ -1,5 +1,6 @@
 ﻿
 using Sandbox;
+using Sandbox.Tools;
 using Sandbox.UI;
 using Sandbox.UI.Construct;
 using System.Collections.Generic;
@@ -8,12 +9,14 @@ using System.Linq;
 [Library]
 public partial class SpawnMenu : Panel
 {
-	public static SpawnMenu Instance;
+	public static SpawnMenu Current;
 	public Panel ToolList;
+	public Panel ToolOptions;
+	public Panel ToolPanel;
 
 	public SpawnMenu()
 	{
-		Instance = this;
+		Current = this;
 
 		StyleSheet.Load( "/ui/SpawnMenu.scss" );
 
@@ -79,23 +82,40 @@ public partial class SpawnMenu : Panel
 	{
 		base.Tick();
 
-		Parent.SetClass( "spawnmenuopen", Input.Down( InputButton.Menu ) );
+		Parent.SetClass( "spawnmenuopen",
+			Input.Down( InputButton.Menu )
+			|| (InputFocus.Current is TextEntry && IsInsideSpawnMenu( InputFocus.Current )) );
+	}
+
+	bool IsInsideSpawnMenu( Panel p )
+	{
+		Panel parent = p.Parent;
+		while ( parent != null )
+		{
+			if ( parent == this ) return true;
+
+			parent = parent.Parent;
+		}
+
+		return false;
 	}
 
 	[Event.Hotload]
 	void ReloadTools()
 	{
 		ToolList.DeleteChildren();
+
 		var tools = Library.GetAllAttributes<Sandbox.Tools.BaseTool>().Where( t => t.Title != "BaseTool" );
 		var groupnames = tools.Select( t => t.Group ).Distinct().OrderBy( g => g );
 		Dictionary<string, Panel> groups = new();
+		Panel groupsPanel = ToolList.Add.Panel( "groups" );
+
 		foreach ( var g in groupnames )
 		{
-			var p = ToolList.Add.Panel( "group" );
+			var p = groupsPanel.Add.Panel( "group" );
 			groups[g] = p;
 			p.Add.Label( g, "groupname" );
 		}
-
 		foreach ( var entry in tools )
 		{
 			var button = groups[entry.Group].Add.Button( entry.Title );
@@ -112,5 +132,45 @@ public partial class SpawnMenu : Panel
 				}
 			} );
 		}
+
+		ToolPanel = ToolList.Add.Panel( "toolpanel" );
+	}
+
+	BaseTool CurrentTool;
+	[Event.Tick]
+	void CheckTool()
+	{
+		var t = GetCurrentTool();
+
+		if ( t != CurrentTool )
+		{
+			CurrentTool = t;
+			CreateToolPanel();
+		}
+	}
+
+	void CreateToolPanel()
+	{
+		ToolPanel.DeleteChildren();
+		if ( CurrentTool != null )
+		{
+			var p = CurrentTool.CreatePanel();
+			if ( p != null )
+				ToolPanel.AddChild( p );
+		}
+	}
+
+	BaseTool GetCurrentTool()
+	{
+		var inv = Local.Pawn.Inventory;
+		for ( int i = 0; i < inv.Count(); i++ )
+		{
+			var c = inv.GetSlot( i );
+			if ( c is Tool t )
+			{
+				return t.CurrentTool;
+			}
+		}
+		return null;
 	}
 }

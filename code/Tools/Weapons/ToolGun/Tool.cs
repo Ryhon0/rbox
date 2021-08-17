@@ -1,5 +1,6 @@
 ﻿using Sandbox;
 using Sandbox.Tools;
+using Sandbox.UI;
 
 [Library( "weapon_tool", Title = "Toolgun" )]
 partial class Tool : Carriable
@@ -116,6 +117,18 @@ namespace Sandbox.Tools
 		public virtual void CreateHitEffects( Vector3 pos )
 		{
 			Parent?.CreateHitEffects( pos );
+		}
+
+		public string GetConvarValue( string name, string defaultValue = null )
+		{
+			return Host.IsServer
+				? Owner.GetClientOwner().GetUserString( name, defaultValue )
+				: ConsoleSystem.GetValue( name, default );
+		}
+
+		public virtual Panel CreatePanel()
+		{
+			return null;
 		}
 	}
 }

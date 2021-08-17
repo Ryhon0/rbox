@@ -86,14 +86,18 @@
 
                 &.visible {
                     display: flex;
-                    flex-direction: column;
                 }
             }
 
             .toollist {
-                flex-direction: column;
-                width: 150px;
+                flex-direction: row;
+                width: 425px;
                 color: #aaa;
+
+                .toolpanel {
+                    margin-left: 20px;
+                    width: 300px;
+                }
 
                 button {
                     padding: 3px 10px;
@@ -145,11 +149,15 @@
     }
 }
 
-.group {
+.groupname, .title {
+    color: #eee;
+}
+
+.groups {
     flex-direction: column;
 
-    .groupname {
-        color: #eee;
+    .group {
+        flex-direction: column;
     }
 }
 
@@ -175,7 +183,6 @@
     }
 
     .canvas {
-        overflow: scroll;
         width: 100%;
         flex-grow: 1;
         flex-wrap: wrap;
@@ -185,7 +192,7 @@
 
         &.entities {
             .cell {
-                padding-bottom: 25px;
+                padding-bottom: 12px;
             }
         }
 
@@ -223,5 +230,35 @@
             &:active {
             }
         }
+    }
+}
+
+SpawnList {
+    .canvas {
+        overflow: scroll;
+    }
+}
+
+EntityList {
+    overflow: scroll;
+    flex-direction: column;
+    color: white;
+
+    .group {
+        flex-direction: column;
+
+        .title {
+            color: white;
+        }
+
+        .entities {
+            overflow: visible;
+            justify-content: start;
+            flex-wrap: wrap;
+        }
+    }
+
+    .icon {
+        margin-right: 8px;
     }
 }
