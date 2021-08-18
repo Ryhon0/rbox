@@ -26,7 +26,9 @@ namespace Sandbox
 			}
 			else
 			{
-				SetParam( "holdtype", 0 );
+				SetParam( "holdtype", 4 );
+				SetParam( "holdtype_handedness", 0 );
+				SetParam( "holdtype_pose_hand", 0.07f );
 				SetParam( "aim_body_weight", 0.5f );
 			}
 		}
