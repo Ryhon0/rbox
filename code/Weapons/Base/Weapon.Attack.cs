@@ -169,9 +169,13 @@ partial class Weapon
 		var t = Trace.Ray( start, end )
 					.UseHitboxes()
 					.HitLayer( CollisionLayer.Water, false )
-					//.Ignore( this )
 					.Size( 1.0f );
-		//if ( !IsUsingVR ) t.Ignore( Owner );
+
+		if ( !IsUsingVR )
+		{
+			t.Ignore( this );
+			t.Ignore( Owner );
+		}
 		var tr = t.Run();
 		TraceBullet( start, end );
 		return tr.Hit ? tr.EndPos : end;
@@ -231,9 +235,13 @@ partial class Weapon
 		var t = Trace.Ray( start, end )
 				.UseHitboxes()
 				.HitLayer( CollisionLayer.Water, !InWater )
-				//.Ignore( this )
 				.Size( radius );
-		//if ( !IsUsingVR ) t.Ignore( Owner );
+
+		if ( !IsUsingVR )
+		{
+			t.Ignore( this );
+			t.Ignore( Owner );
+		}
 		var tr = t.Run();
 
 		yield return tr;
