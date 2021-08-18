@@ -42,6 +42,7 @@ partial class SandboxPlayer
 		Wear(
 		FileSystem.Mounted.ReadJson<List<Clothing>>( "/config/clothes/skin.json" ).GetRandom(),
 		ClothingSlot.Skin );
+		WearHeadset();
 
 		return;
 

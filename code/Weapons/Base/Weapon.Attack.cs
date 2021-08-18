@@ -1,27 +1,84 @@
 ﻿using Sandbox;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 partial class Weapon
 {
 	public static bool UseClientSideHitreg = false;
 	public static SoundEvent Dryfire = new SoundEvent( "weapons/rust_shotgun/sounds/rust-shotgun-dryfire.vsnd" );
+
+	public bool IsUsingVR => Input.VR.IsActive;
+
+	public Vector3 ShootFrom => IsUsingVR ?
+		GetAttachment( "muzzle" ).Value.Position :
+		Owner.EyePos;
+
+	public Rotation ShootFromAngle => IsUsingVR ?
+		GetAttachment( "muzzle" ).Value.Rotation :
+		Owner.EyeRot;
+
+	public bool WantsToShoot
+	{
+		get
+		{
+			if ( Owner is Player )
+			{
+				if ( IsAutomatic )
+				{
+					return IsUsingVR ?
+						Input.VR.RightHand.Trigger.Value == 1 :
+						Input.Down( InputButton.Attack1 );
+				}
+				else
+				{
+					return IsUsingVR ?
+						Input.VR.RightHand.Trigger.Value == 1 && Input.VR.RightHand.Trigger.Delta != 0 :
+						Input.Pressed( InputButton.Attack1 );
+				}
+			}
+			// TODO: shooting for bots
+			else
+			{
+				return false;
+			}
+		}
+	}
+
+	public bool WantsToShootSecondary
+	{
+		get
+		{
+			if ( Owner is Player )
+			{
+				return IsUsingVR ?
+					Input.VR.RightHand.Grip.Value == 1 :
+					Input.Down( InputButton.Attack2 );
+			}
+			// TODO: shooting for bots
+			else
+			{
+				return false;
+			}
+		}
+	}
+
 	public override bool CanPrimaryAttack()
 	{
 		if ( Owner == null || Owner.Health <= 0 ) return false;
 
 		if ( BurstShotsRemaining > 0 && TimeSincePrimaryAttack > BurstInterval ) return true;
 
-		if ( AmmoClip <= 0 ) return Input.Pressed( InputButton.Attack1 );
-
 		if ( !IsMelee )
 			if ( ReloadMagazine )
 				if ( IsReloading ) return false;
 
+		if ( AmmoClip <= 0 ) return IsUsingVR ?
+						Input.VR.RightHand.Trigger.Value == 1 && Input.VR.RightHand.Trigger.Delta != 0 :
+						Input.Pressed( InputButton.Attack1 );
+
 		var chambered = TimeSincePrimaryAttack > AttackInterval;
-		var shooting = IsAutomatic ?
-			Input.Down( InputButton.Attack1 ) :
-			Input.Pressed( InputButton.Attack1 );
+		var shooting = WantsToShoot;
 
 		return chambered && shooting;
 	}
@@ -82,7 +139,7 @@ partial class Weapon
 		{
 			if ( Owner == null ) continue;
 
-			var forward = Owner.EyeRot.Forward;
+			var forward = ShootFromAngle.Forward;
 			forward += (Vector3.Random + Vector3.Random + Vector3.Random + Vector3.Random) * spread * 0.25f;
 			forward = forward.Normal;
 
@@ -90,7 +147,7 @@ partial class Weapon
 			p.Owner = Owner;
 
 			p.Position = GetProjectilePosition();
-			p.Rotation = Owner.EyeRot;
+			p.Rotation = ShootFromAngle;
 
 			var vel = forward * projectilespeed;
 			p.Velocity = vel;
@@ -107,15 +164,15 @@ partial class Weapon
 
 	Vector3 GetProjectilePosition( float MaxDistance = 30 )
 	{
-		var start = Owner.EyePos;
-		var end = start + Owner.EyeRot.Forward * MaxDistance;
-		var tr = Trace.Ray( start, end )
+		var start = ShootFrom;
+		var end = start + ShootFromAngle.Forward * MaxDistance;
+		var t = Trace.Ray( start, end )
 					.UseHitboxes()
 					.HitLayer( CollisionLayer.Water, false )
-					.Ignore( Owner )
-					.Ignore( this )
-					.Size( 1.0f )
-					.Run();
+					//.Ignore( this )
+					.Size( 1.0f );
+		//if ( !IsUsingVR ) t.Ignore( Owner );
+		var tr = t.Run();
 		TraceBullet( start, end );
 		return tr.Hit ? tr.EndPos : end;
 	}
@@ -131,11 +188,11 @@ partial class Weapon
 		for ( int i = 0; i < BulletsPerShot; i++ )
 		{
 			if ( Owner == null ) continue;
-			var forward = Owner.EyeRot.Forward;
+			var forward = ShootFromAngle.Forward;
 			forward += (Vector3.Random + Vector3.Random + Vector3.Random + Vector3.Random) * spread * 0.25f;
 			forward = forward.Normal;
 
-			foreach ( var tr in TraceBullet( Owner.EyePos, Owner.EyePos + forward * Range, bulletSize ) )
+			foreach ( var tr in TraceBullet( ShootFrom, ShootFrom + forward * Range, bulletSize ) )
 			{
 				if ( tr.Hit ) tr.Surface.DoBulletImpact( tr );
 
@@ -164,6 +221,22 @@ partial class Weapon
 				}
 			}
 		}
+	}
+
+	public override IEnumerable<TraceResult> TraceBullet( Vector3 start, Vector3 end, float radius = 2 )
+	{
+
+		bool InWater = Physics.TestPointContents( start, CollisionLayer.Water );
+
+		var t = Trace.Ray( start, end )
+				.UseHitboxes()
+				.HitLayer( CollisionLayer.Water, !InWater )
+				//.Ignore( this )
+				.Size( radius );
+		//if ( !IsUsingVR ) t.Ignore( Owner );
+		var tr = t.Run();
+
+		yield return tr;
 	}
 
 	[ServerCmd]
