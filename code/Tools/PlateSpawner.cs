@@ -13,6 +13,10 @@ namespace Sandbox.Tools
 		public static int PlateHeight { get; set; } = 10;
 		[ConVar.ClientData( "tool_platespawner_z" )]
 		public static int PlateDepth { get; set; } = 100;
+		[ConVar.ClientData( "tool_platespawner_texturesize" )]
+		public static int TextureSize { get; set; } = 128;
+		[ConVar.ClientData( "tool_platespawner_material" )]
+		public static string Material { get; set; }
 
 		PreviewEntity previewModel;
 		public override void CreatePreviews()
@@ -22,7 +26,8 @@ namespace Sandbox.Tools
 			var mdl = VertexMeshBuilder.CreateRectangleModel( new Vector3(
 				GetConvarInt( "tool_platespawner_y", 10 ),
 				GetConvarInt( "tool_platespawner_x", 100 ),
-				GetConvarInt( "tool_platespawner_z", 100 ) ) );
+				GetConvarInt( "tool_platespawner_z", 100 ) ),
+				GetConvarValue( "tool_platespawner_material", "materials/dev/dev_measuregeneric01.vmat" ) );
 
 			if ( TryCreatePreview( ref previewModel, "" ) )
 			{
@@ -49,7 +54,8 @@ namespace Sandbox.Tools
 					ent.Model = VertexMeshBuilder.GenerateRectangleServer(
 						GetConvarInt( "tool_platespawner_y", 10 ),
 						GetConvarInt( "tool_platespawner_x", 100 ),
-						GetConvarInt( "tool_platespawner_z", 100 ), 64 );
+						GetConvarInt( "tool_platespawner_z", 100 ),
+						GetConvarValue( "tool_platespawner_material", "materials/dev/dev_measuregeneric01.vmat" ) );
 
 					ent.Rotation = Rotation.LookAt( tr.Normal, tr.Direction );
 					ent.Position = tr.EndPos + (ent.Rotation.Forward * ((Math.Abs( GetConvarInt( "tool_platespawner_y", 10 ) ) / 2) + 1));
@@ -124,6 +130,25 @@ namespace Sandbox.Tools
 			{
 				ConsoleSystem.Run( "tool_platespawner_y", y.Text );
 			} );
+
+			StyleSheet.Load( "Tools/Material.scss" );
+			var mats = Add.Panel( "materiallist" );
+			foreach ( var file in FileSystem.Mounted.FindFile( "", "*.vmat_c.png", true ) )
+			{
+				if ( string.IsNullOrWhiteSpace( file ) ) continue;
+
+				var b = mats.Add.Button( "", "material" );
+				b.AddEventListener( "onclick", () =>
+				{
+					Log.Info( file );
+					ConsoleSystem.Run( "tool_platespawner_material", file.Remove( file.Length - 6 ) );
+					Log.Info( ConsoleSystem.GetValue( "tool_platespawner_material", "" ) );
+				} );
+				b.Style.Background = new PanelBackground
+				{
+					Texture = Texture.Load( $"{file}", false )
+				};
+			}
 		}
 
 		int GetConvarInt( string convar, int fallback = 1 )

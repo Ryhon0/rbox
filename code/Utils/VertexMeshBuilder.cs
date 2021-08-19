@@ -1,5 +1,6 @@
 ﻿using Sandbox;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 
 // https://github.com/Nebual/sandbox-plus/blob/main/code/VertexMeshBuilder.cs
@@ -41,9 +42,10 @@ public partial class VertexMeshBuilder
 {
 	public List<MeshVertex> vertices = new();
 	public static Dictionary<string, Model> Models = new();
-	public static string CreateRectangleModel( Vector3 size, int texSize = 64 )
+	public static string CreateRectangleModel( Vector3 size, string material = "materials/dev/dev_measuregeneric01.vmat", int texSize = 64 )
 	{
-		var key = $"rect_{size.x}_{size.y}_{size.z}_{texSize}";
+		var materialhash = material.Split( "/" ).Last().FastHash();
+		var key = $"rect_{size.x}_{size.y}_{size.z}_{texSize}_{materialhash}";
 		if ( Models.ContainsKey( key ) )
 		{
 			return key;
@@ -54,7 +56,7 @@ public partial class VertexMeshBuilder
 		var vertexBuilder = new VertexMeshBuilder();
 		vertexBuilder.AddRectangle( Vector3.Zero, size, texSize, Color.White );
 
-		var mesh = new Mesh( Material.Load( "materials/dev/dev_measuregeneric01.vmat" ) );
+		var mesh = new Mesh( Material.Load( material ) );
 
 		mesh.CreateVertexBuffer<MeshVertex>( vertexBuilder.vertices.Count, MeshVertex.Layout, vertexBuilder.vertices.ToArray() );
 		mesh.SetBounds( mins, maxs );
@@ -69,27 +71,27 @@ public partial class VertexMeshBuilder
 		return key;
 	}
 
-	public static MeshEntity SpawnEntity( int length, int width, int height, int texScale = 64 )
+	public static MeshEntity SpawnEntity( int length, int width, int height, string material = "materials/dev/dev_measuregeneric01.vmat", int texScale = 64 )
 	{
-		var vertexModel = GenerateRectangleServer( length, width, height, texScale );
+		var vertexModel = GenerateRectangleServer( length, width, height, material, texScale );
 		MeshEntity entity = new() { Model = vertexModel };
 		entity.Tick();
 		return entity;
 	}
 
 	[ClientRpc]
-	public static void GenerateRectangleClient( int length, int width, int height, int texSize )
+	public static void GenerateRectangleClient( int length, int width, int height, string material, int texSize = 64 )
 	{
-		GenerateRectangle( length, width, height, texSize );
+		GenerateRectangle( length, width, height, material, texSize );
 	}
-	public static string GenerateRectangleServer( int length, int width, int height, int texSize )
+	public static string GenerateRectangleServer( int length, int width, int height, string material, int texSize = 64 )
 	{
-		GenerateRectangleClient( length, width, height, texSize );
-		return GenerateRectangle( length, width, height, texSize );
+		GenerateRectangleClient( length, width, height, material, texSize );
+		return GenerateRectangle( length, width, height, material, texSize );
 	}
-	public static string GenerateRectangle( int length, int width, int height, int texSize )
+	public static string GenerateRectangle( int length, int width, int height, string material, int texSize = 64 )
 	{
-		return CreateRectangleModel( new Vector3( length, width, height ), texSize );
+		return CreateRectangleModel( new Vector3( length, width, height ), material, texSize );
 	}
 
 	private void AddRectangle( Vector3 position, Vector3 size, int texSize, Color color = new Color() )
