@@ -1,0 +1,15 @@
+﻿.materiallist {
+    width: 100%;
+    flex-grow: 1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow: scroll;
+
+    .material {
+        width: 75px;
+        height: 75px;
+        margin: 8px;
+        background-repeat: repeat;
+        background-size: cover;
+    }
+}
