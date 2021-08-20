@@ -31,7 +31,7 @@ partial class SandboxPlayer
 
 		Inventory.DeleteContents();
 
-		if(IsServer)
+		if ( IsServer )
 		{
 			if ( LastDamage.Flags.HasFlag( DamageFlags.Blast ) || LastDamage.Flags.HasFlag( DamageFlags.AlwaysGib ) )
 			{
@@ -74,13 +74,6 @@ partial class SandboxPlayer
 		Particles.Create( "particles/impact.flesh-big.vpcf", pos );
 		PlaySound( "kersplat" );
 
-		var head = SpawnHead();
-		if(head != null)
-		{
-			head.PhysicsGroup.AddVelocity( ((Vector3.Up * 0.5f) + Vector3.Random) * 200 );
-			Corpse = head;
-		}	
-
 		for ( int i = 0; i < 10; i++ )
 		{
 			var mdl = new string[]
@@ -101,7 +94,14 @@ partial class SandboxPlayer
 
 			GibLimit.Watch( gib );
 
-			if ( HasHead() ) Corpse = gib;
+			Corpse = gib;
+		}
+
+		var head = SpawnHead();
+		if ( head != null )
+		{
+			head.PhysicsGroup.AddVelocity( ((Vector3.Up * 0.5f) + Vector3.Random) * 200 );
+			Corpse = head;
 		}
 	}
 
@@ -138,14 +138,14 @@ partial class SandboxPlayer
 		if ( headshot && HasHead() )
 		{
 			// Disable head body group
-			ent.SetBodyGroup(0, 1);
+			ent.SetBodyGroup( 0, 1 );
 
 			var bone = new ModelEntity( "models/citizen/head_bone.vmdl" );
-			bone.SetMaterialGroup(GetMaterialGroup());
-			bone.SetParent(ent, true);
-			
+			bone.SetMaterialGroup( GetMaterialGroup() );
+			bone.SetParent( ent, true );
+
 			var head = SpawnHead();
-			head.PhysicsGroup.AddVelocity(force);
+			head.PhysicsGroup.AddVelocity( force );
 
 			Corpse = head;
 		}
@@ -161,11 +161,11 @@ partial class SandboxPlayer
 				if ( e.Tags.Has( "hat" ) && forceBone == GetBoneIndex( "head" ) ) continue;
 
 				var clothing = new ModelEntity( e.GetModelName() );
-				clothing.SetMaterialGroup(e.GetMaterialGroup());
+				clothing.SetMaterialGroup( e.GetMaterialGroup() );
 				clothing.SetParent( ent, true );
 			}
 		}
-		
+
 		ent.PhysicsGroup.AddVelocity( force );
 
 		if ( forceBone >= 0 )
@@ -189,7 +189,7 @@ partial class SandboxPlayer
 
 	bool HasHead()
 	{
-		return BodyMask.HasFlag(BodyMask.Head);
+		return BodyMask.HasFlag( BodyMask.Head );
 	}
 
 	Prop SpawnHead()
