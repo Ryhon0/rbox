@@ -16,7 +16,7 @@ namespace Sandbox.Tools
 		[ConVar.ClientData( "tool_platespawner_texturesize" )]
 		public static int TextureSize { get; set; } = 128;
 		[ConVar.ClientData( "tool_platespawner_material" )]
-		public static string Material { get; set; }
+		public static string Material { get; set; } = "materials/dev/dev_measuregeneric01.vmat";
 
 		PreviewEntity previewModel;
 		public override void CreatePreviews()
