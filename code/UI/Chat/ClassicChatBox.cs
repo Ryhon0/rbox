@@ -54,7 +54,8 @@ public partial class ClassicChatBox : Panel
 
 	public void ToggleEmojis()
 	{
-		EmojiPicker.SetClass( "open", !EmojiPicker.HasClass( "open" ) );
+		if ( EmojiPicker.HasClass( "open" ) ) HideEmojis();
+		else ShowEmojis();
 	}
 	public void ShowEmojis()
 	{
