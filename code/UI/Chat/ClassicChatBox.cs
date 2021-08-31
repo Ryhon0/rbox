@@ -34,7 +34,6 @@ public partial class ClassicChatBox : Panel
 		EmojiButton = ChatBoxPanel.Add.Button( "😀", "emojibutton" );
 		EmojiButton.AddEventListener( "onclick", () => ToggleEmojis() );
 		EmojiPicker = ChatBoxPanel.AddChild<EmojiPicker>();
-		EmojiPicker.Chat = this;
 		EmojiPicker.Search.AddEventListener( "onblur", () => Input.Focus() );
 		EmojiPicker.Search.AcceptsFocus = true;
 

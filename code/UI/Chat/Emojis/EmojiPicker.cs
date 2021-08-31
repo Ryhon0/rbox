@@ -6,7 +6,6 @@ using System.Linq;
 
 public class EmojiPicker : Panel
 {
-	public ClassicChatBox Chat;
 	public TextEntry Search;
 	Panel EmojiPanel;
 
