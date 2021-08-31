@@ -16,6 +16,19 @@ public class GrapplingGun : Weapon
 	public override int ClipSize => 1;
 	public override string Projectile => "grapplinghook";
 
+	public override void Simulate( Client cl )
+	{
+		base.Simulate( cl );
+
+		ViewModelEntity?.SetBodyGroup( 1, Entity.All.OfType<GrapplingHook>().Any( h => h.Owner == Owner ) ? 1 : 0 );
+
+	}
+
+	public override bool CanPrimaryAttack()
+	{
+		return base.CanPrimaryAttack() && !Entity.All.OfType<GrapplingHook>().Any( h => h.Owner == Owner );
+	}
+
 	public override void AttackPrimary()
 	{
 		if ( !IsServer ) return;
@@ -36,7 +49,7 @@ public class GrapplingGun : Weapon
 	{
 		base.OnCarryDrop( dropper );
 		foreach ( var pr in Entity.All.OfType<GrapplingHook>()
-			.Where( p => p.AttachedEntity == dropper ) )
+			.Where( p => p.Weapon == this ) )
 		{
 			pr.AttachedEntity = this;
 			pr.Rope.SetEntityBone( 0, this, 0 );
@@ -49,7 +62,7 @@ public class GrapplingHook : Projectile
 {
 	public override string ModelPath => "weapons/grapplegun/hook.vmdl";
 	bool Stuck;
-	float MaxDistance = 2500;
+	float MaxDistance = 2000;
 
 	public Entity AttachedEntity;
 	public Entity HitEntity;
@@ -64,10 +77,30 @@ public class GrapplingHook : Projectile
 	[Event.Physics.PostStep]
 	void PhysicsPostStep()
 	{
-		if ( AttachedEntity is Player p && p.LifeState == LifeState.Dead )
+		if ( AttachedEntity.IsValid() )
 		{
-			AttachedEntity = p.Corpse;
-			Rope.SetEntityBone( 0, AttachedEntity, 0 );
+			if ( AttachedEntity is Player p && p.LifeState == LifeState.Dead )
+			{
+				AttachedEntity = p.Corpse;
+				Rope.SetEntityBone( 0, AttachedEntity, 0 );
+			}
+
+			if ( Trace.Ray( Position, AttachedEntity.WorldSpaceBounds.Center )
+				.Ignore( AttachedEntity )
+				.Ignore( this )
+				.HitLayer( CollisionLayer.Player, false )
+				.HitLayer( CollisionLayer.Debris, false )
+				.Run().Hit )
+			{
+				Delete();
+				return;
+			}
+
+			if ( AttachedEntity.Position.Distance( Position ) > MaxDistance )
+			{
+				Delete();
+				return;
+			}
 		}
 
 		if ( IsServer )
@@ -97,7 +130,7 @@ public class GrapplingHook : Projectile
 
 		// Pull prop/player towards player
 		if ( (HitEntity is Prop prp &&
-			prp.PhysicsGroup?.GetBody( 0 )?.BodyType != PhysicsBodyType.Static)
+			prp.PhysicsGroup?.GetBody( 0 )?.BodyType == PhysicsBodyType.Dynamic)
 			|| HitEntity is Player )
 		{
 			if ( HitEntity is Player pl )
@@ -145,11 +178,6 @@ public class GrapplingHook : Projectile
 	void MoveForward()
 	{
 		if ( !AttachedEntity.IsValid() ) return;
-		if ( AttachedEntity.Position.Distance( Position ) > MaxDistance )
-		{
-			Delete();
-			return;
-		}
 
 		var ray = Trace.Ray( Position, Position + Rotation.Forward * 40 )
 			.HitLayer( CollisionLayer.Water, false )
@@ -159,8 +187,6 @@ public class GrapplingHook : Projectile
 			.Ignore( Weapon );
 
 		var tr = ray.Run();
-
-		DebugOverlay.Line( tr.StartPos, tr.EndPos, tr.Hit ? Color.Red : Color.Green, 1 );
 
 		if ( tr.Hit )
 		{
@@ -179,7 +205,7 @@ public class GrapplingHook : Projectile
 				if ( !HitEntity.IsValid() ) return;
 			}
 
-			if ( HitEntity.PhysicsGroup?.GetBody( 0 )?.BodyType == PhysicsBodyType.Static )
+			if ( HitEntity.PhysicsGroup?.GetBody( 0 )?.BodyType != PhysicsBodyType.Dynamic )
 				if ( AttachedEntity.GroundEntity != null )
 				{
 					AttachedEntity.Position += Vector3.Up * 20;

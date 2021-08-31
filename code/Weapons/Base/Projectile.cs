@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-public class Projectile : BasePhysics
+public partial class Projectile : BasePhysics
 {
 	public static bool DebugDrawRadius = false;
 
@@ -15,7 +15,8 @@ public class Projectile : BasePhysics
 	public virtual float MinimumDamageRadius => ExplosionRadius / 2;
 	public virtual DamageFlags DamageFlags { get; set; }
 
-	public Weapon Weapon;
+	[Net]
+	public Weapon Weapon { get; set; }
 
 	bool Stuck;
 

@@ -15,7 +15,7 @@
 						[
 							{
 								from = ""
-								to = "materials/dev/gray_25.vmat"
+								to = "models/sbox_props/street_lamp/street_lamp_metal_pole.vmat"
 							},
 						]
 						use_global_default = false
@@ -34,7 +34,7 @@
 						collision_prop = "default"
 						origin = [ -11.0, 0.0, 0.0 ]
 						angles = [ 0.0, 0.0, 0.0 ]
-						dimensions = [ 24.0, 24.0, 24.0 ]
+						dimensions = [ -27.0, 5.0, 5.0 ]
 					},
 				]
 			},

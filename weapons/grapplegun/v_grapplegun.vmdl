@@ -39,12 +39,16 @@
 						remaps = 
 						[
 							{
-								from = ""
+								from = "skin.vmat"
 								to = "models/citizen/skin/citizen_skin.vmat"
 							},
 							{
-								from = "material.vmat"
-								to = "materials/default/white.vmat"
+								from = "hook.vmat"
+								to = "models/sbox_props/street_lamp/street_lamp_metal_pole.vmat"
+							},
+							{
+								from = "flare gun.vmat"
+								to = "materials/dev/primary_red.vmat"
 							},
 						]
 						use_global_default = false
