@@ -100,7 +100,7 @@ public partial class SpawnMenu : Panel
 		return false;
 	}
 
-	[Event.Hotload]
+	//[Event.Hotload]
 	void ReloadTools()
 	{
 		ToolList.DeleteChildren();

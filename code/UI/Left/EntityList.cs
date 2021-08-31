@@ -12,7 +12,7 @@ public partial class EntityList : Panel
 		Reload();
 	}
 
-	[Event.Hotload]
+	//[Event.Hotload]
 	void Reload()
 	{
 		DeleteChildren();
