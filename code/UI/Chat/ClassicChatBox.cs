@@ -60,11 +60,13 @@ public partial class ClassicChatBox : Panel
 	public void ShowEmojis()
 	{
 		EmojiPicker.AddClass( "open" );
+		EmojiPicker.OnShow();
 		EmojiPicker.Search.Focus();
 	}
 	public void HideEmojis()
 	{
 		Input.Focus();
+		EmojiPicker.OnShow();
 		EmojiPicker.RemoveClass( "open" );
 	}
 

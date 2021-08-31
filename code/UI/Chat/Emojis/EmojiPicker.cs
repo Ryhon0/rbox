@@ -8,6 +8,7 @@ public class EmojiPicker : Panel
 {
 	public TextEntry Search;
 	Panel EmojiPanel;
+	EmojiPanel CurrentPanel;
 
 	static Dictionary<string, string> GroupEmojis = new Dictionary<string, string>()
 	{
@@ -38,20 +39,24 @@ public class EmojiPicker : Panel
 		{
 			if ( cat.Name == "Skin Tones" ) continue;
 
-			var page = EmojiPanel.Add.Panel( "emojilist" );
+			var page = EmojiPanel.AddChild<EmojiPanel>("emojilist" );
+			page.Emojis = cat.Emojis.ToList();
+
+			if ( CurrentPanel == null ) CurrentPanel = page;
 
 			tabs.AddButtonActive( GroupEmojis.GetValueOrDefault( cat.Name ) ?? cat.Name,
-				( b ) => page.SetClass( "active", b ) );
-
-			foreach ( var e in cat.Emojis )
-			{
-				var eb = page.AddChild<EmojiButton>();
-				eb.Text = e.Unicode;
-				eb.Names = e.Names;
-				eb.AddClass( "emoji" );
-				eb.AddEventListener( "onclick", () => Chat.InsertEmoji( e.Unicode ) );
-			}
-
+				( b ) =>
+				{
+					page.SetClass( "active", b );
+					if ( b )
+					{
+						CurrentPanel = page;
+						if(HasClass("open"))
+							page.OnShow();
+					}
+					else page.OnHide();
+				});
+			
 			tabs.SelectedButton = tabs.GetChild( 0 );
 		}
 	}
@@ -72,8 +77,37 @@ public class EmojiPicker : Panel
 			}
 		}
 	}
+
+	public void OnShow()
+	{
+		CurrentPanel.OnShow();
+	}
+
+	public void OnHide()
+	{
+		CurrentPanel.OnHide();
+	}
 }
 
+public class EmojiPanel : Panel
+{
+	public List<Emoji> Emojis;
+	public void OnShow()
+	{
+		foreach ( var e in Emojis )
+		{
+			var eb = AddChild<EmojiButton>();
+			eb.Text = e.Unicode;
+			eb.Names = e.Names;
+			eb.AddClass( "emoji" );
+			eb.AddEventListener( "onclick", () => ClassicChatBox.Current.InsertEmoji( e.Unicode ) );
+		}
+	}
+	public void OnHide()
+	{
+		DeleteChildren();
+	}
+}
 
 public class EmojiButton : Button
 {
