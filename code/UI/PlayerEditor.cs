@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class PlayerEditor : Panel
 {
-	public Scene heroScene;
+	public ScenePanel heroScene;
 	Angles CamAngles;
 	float startTime;
 	AnimSceneObject Player;
@@ -43,8 +43,7 @@ public class PlayerEditor : Panel
 			//playerCostumePreview = new AnimSceneObject( Model.Load( "models/clothes/hotdog/hotdog.vmdl" ), Transform.Zero );
 			//playerPreview.AddChild( "outfit", playerCostumePreview );
 			startTime = Time.Now;
-
-			heroScene = Add.Scene( SceneWorld.Current, new Vector3( 175, 0, 30 ), CamAngles, 25 );
+			heroScene = Add.ScenePanel( SceneWorld.Current, new Vector3( 175, 0, 30 ), Rotation.From(CamAngles), 25 );
 			heroScene.AddClass( "preview" );
 
 			Angles angles = new( 25, 180, 0 );
