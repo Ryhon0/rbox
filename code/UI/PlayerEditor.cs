@@ -36,8 +36,19 @@ public class PlayerEditor : Panel
 		{
 			Player = new AnimSceneObject( Model.Load( "models/citizen/citizen.vmdl" ), Transform.Zero );
 
-			Light.Point( Vector3.Up * 10.0f + Vector3.Forward * 100.0f + Vector3.Right * 100.0f, 2000, Color.White * 15000.0f );
-			Light.Point( Vector3.Up * 10.0f + Vector3.Forward * 100.0f + Vector3.Right * 100.0f, 2000, Color.White * 15000.0f );
+			//< light position = "-100 100 150" radius = "2000" falloff = "0.1" color = "0 200 300" ></ light >
+			//< light position = "70 -30 170" radius = "2000" falloff = "0.2" ></ light >
+
+			var light = new Light( new Vector3(-100,100,150), 2000, Color.White);
+			light.Falloff = 0;
+			//light.Falloff = 0f;
+			light = new Light( new Vector3( 700, -30, 170 ), 2000, Color.White );
+			light.Falloff = 0;
+
+			//light.Falloff = 0.2f; 
+			light = new Light( new Vector3( 100, 100, 150 ), 2000, Color.White );
+			light.Falloff = 0;
+
 
 			// Clothes
 			//playerCostumePreview = new AnimSceneObject( Model.Load( "models/clothes/hotdog/hotdog.vmdl" ), Transform.Zero );
