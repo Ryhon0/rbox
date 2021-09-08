@@ -74,10 +74,10 @@ public class PlayerEditor : Panel
 		base.Tick();
 		CamAngles.yaw = 180;
 
-		Player.Update( Time.Now - startTime );
+		Player.Update( RealTime.Delta );
 		foreach ( var c in Clothes )
 		{
-			c.Update( Time.Now - startTime );
+			c.Update( RealTime.Delta );
 		}
 	}
 }
