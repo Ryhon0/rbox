@@ -15,6 +15,11 @@ partial class SandboxGame : Game
 			_ = new Hud();
 		}
 	}
+	public override void DoPlayerDevCam( Client player )
+	{
+		Host.AssertServer();
+		player.DevCamera = player.DevCamera == null ? new DevCamera() : null;
+	}
 
 	public override void ClientJoined( Client cl )
 	{
@@ -80,6 +85,7 @@ partial class SandboxGame : Game
 
 		Undo.Add( ConsoleSystem.Caller, new ModelUndo( ent ) );
 	}
+
 
 	[ServerCmd( "spawn_entity" )]
 	public static void SpawnEntity( string entName )
