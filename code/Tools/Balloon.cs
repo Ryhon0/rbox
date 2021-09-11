@@ -5,7 +5,7 @@
 	{
 		public virtual string BalloonModelPath => "models/citizen_props/balloonregular01.vmdl";
 		[Net]
-		public Color32 Tint { get; set; }
+		public Color Tint { get; set; }
 
 		PreviewEntity previewModel;
 
@@ -15,7 +15,7 @@
 
 			if ( Host.IsServer )
 			{
-				Tint = Color.Random.ToColor32();
+				Tint = Color.Random;
 			}
 		}
 
@@ -81,7 +81,7 @@
 				ent.RenderColor = Input.Down( InputButton.Duck )
 					? (Owner as SandboxPlayer).PlayerColor : Tint; ;
 
-				Tint = Color.Random.ToColor32();
+				Tint = Color.Random;
 
 				if ( Host.IsServer )
 					Undo.Add( Owner.GetClientOwner(), new EntityUndo( ent ) );
