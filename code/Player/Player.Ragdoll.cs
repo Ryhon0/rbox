@@ -29,6 +29,12 @@ partial class SandboxPlayer
 		Camera = MainCamera;
 		Controller = null;
 
+		var cl = GetClientOwner();
+		if (cl!=null)
+		{
+			cl.SetScore( "deaths", cl.GetScore( "deaths", 0 ) + 1 );
+		}
+
 		Inventory.DeleteContents();
 
 		if ( IsServer )
