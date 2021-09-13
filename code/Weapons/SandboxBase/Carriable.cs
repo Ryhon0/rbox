@@ -28,4 +28,11 @@ public partial class Carriable : BaseCarriable, IUse
 	{
 		return Owner == null;
 	}
+
+	public override void SimulateAnimator( PawnAnimator anim )
+	{
+		base.SimulateAnimator( anim );
+
+		anim.SetParam( "holdtype_handedness", (int)Handedness.RightHanded);
+	}
 }

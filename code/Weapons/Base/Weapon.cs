@@ -16,6 +16,13 @@ public enum HoldType
 	Shotgun = 3,
 	Universal = 4
 }
+
+public enum Handedness 
+{
+	TwoHanded = 0,
+	RightHanded = 1,
+	LeftHanded = 2
+}
 public partial class Weapon : BaseWeapon
 {
 	// Networked variables
@@ -61,6 +68,7 @@ public partial class Weapon : BaseWeapon
 
 	// Audio/Visual
 	public virtual HoldType HoldType => HoldType.Pistol;
+	public virtual Handedness Handedness => Handedness.RightHanded;
 	public virtual CrosshairType CrosshairType => CrosshairType.Dot;
 	public virtual string ShootShound => "rust_pistol.shoot";
 	public virtual string WorldModelPath => "weapons/rust_pistol/rust_pistol.vmdl";
@@ -179,6 +187,7 @@ public partial class Weapon : BaseWeapon
 	public override void SimulateAnimator( PawnAnimator anim )
 	{
 		anim.SetParam( "holdtype", (int)HoldType ); // TODO this is shit
+		anim.SetParam( "holdtype_handedness", (int)Handedness );
 		anim.SetParam( "aimat_weight", 1.0f );
 	}
 }
