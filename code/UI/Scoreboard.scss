@@ -13,14 +13,12 @@
     opacity: 0;
     transition: all 0.1s ease-out;
     transform: scale( 1.05 );
-    transform-origin: 50% 50%;
-    background-size: 100% 100%;
-    background-position: center center;
     background-color: rgba( 10, 10, 10, 0.8 );
 
     &.open {
         opacity: 1;
-        transform: scale( 1 );
+       
+        pointer-events: visible;
     }
 
     .color {
@@ -34,7 +32,6 @@
         height: 32px;
         width: 32px;
         margin-right: 6px;
-        bottom: 2px;
     }
 
     .name {
@@ -55,7 +52,13 @@
         margin-right: 50px;
     }
 
+    .admin {
+        width: 100px;
+        text-align: right;
+    }
+
     .header {
+        pointer-events: all;
         font-weight: 500;
         border-bottom: 3px solid #fc0;
         min-width: 30%;
@@ -77,6 +80,7 @@
             padding: 4px 10px;
             padding-top: 8px;
             color: #fff;
+            align-items: center;
 
             label {
                 text-shadow: 0px 0px 10px #f70a;
@@ -87,5 +91,44 @@
                 border: 1px solid #aa6a00;
             }
         }
+    }
+}
+
+.tag {
+    border-radius: 5px;
+
+    &.bot, &.host {
+        padding: 5px;
+        margin-right: 5px;
+    }
+
+    &.bot {
+        background-color: dodgerblue;
+        color: white;
+    }
+
+    &.host {
+        background-color: green;
+        color: wheat;
+    }
+}
+
+Button {
+    background-color: orange;
+    color: white;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-left: 5px;
+    width: 32px;
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    &.kick {
+        background-image: url(ui/kick.png);
+    }
+
+    &.ban {
+        background-image: url(ui/ban.png);  
     }
 }

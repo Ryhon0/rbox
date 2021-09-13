@@ -11,7 +11,7 @@ public partial class Hud : HudEntity<RootPanel>
 
 		Current = this;
 
-		RootPanel.StyleSheet.Load( "/Hud.scss" );
+		RootPanel.StyleSheet.Load( "/UI/Hud/Hud.scss" );
 
 		RootPanel.AddChild<NameTags>();
 		RootPanel.AddChild<CrosshairCanvas>();
@@ -21,6 +21,8 @@ public partial class Hud : HudEntity<RootPanel>
 		RootPanel.AddChild<InventoryBar>();
 		RootPanel.AddChild<CurrentTool>();
 		RootPanel.AddChild<SpawnMenu>();
+		RootPanel.AddChild<CMenu>();
+		RootPanel.AddChild<Ammo>();
 
 		RootPanel.AddChild<ClassicChatBox>();
 		RootPanel.AddChild<RKillFeed>();

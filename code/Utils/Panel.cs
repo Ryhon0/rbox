@@ -1,5 +1,6 @@
 ﻿using Sandbox;
 using Sandbox.UI;
+using System.Linq;
 public static class PanelExtension
 {
 	public static void PositionAtCrosshair( this Panel panel )
@@ -35,4 +36,7 @@ public static class PanelExtension
 		panel.Style.Top = Length.Fraction( screenpos.y );
 		panel.Style.Dirty();
 	}
+
+	public static bool IsDescendantOf(this Panel child, Panel parent)
+		=> parent.Descendants.Any( d => d == child );
 }

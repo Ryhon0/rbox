@@ -13,7 +13,7 @@ public class PlayerEditor : Panel
 	List<AnimSceneObject> Clothes = new List<AnimSceneObject>();
 	public PlayerEditor()
 	{
-		StyleSheet.Load( "/code/UI/PlayerEditor.scss" );
+		StyleSheet.Load( "/code/UI/Elements/PlayerEditor.scss" );
 		LoadWorld();
 		PlayerColor = AddChild<ColorPicker>( "playercolor" );
 

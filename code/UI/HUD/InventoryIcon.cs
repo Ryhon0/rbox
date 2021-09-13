@@ -8,13 +8,15 @@ public class InventoryIcon : Panel
 	public Entity TargetEnt;
 	public Label Label;
 	public Label Number;
+	public int index;
+	public bool clicked;
 
 	public InventoryIcon( int i, Panel parent )
 	{
+		index = i;
 		Parent = parent;
 		Label = Add.Label( "empty", "item-name" );
 		Number = Add.Label( $"{i}", "slot-number" );
-	}
 
 	public void Clear()
 	{

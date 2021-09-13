@@ -18,7 +18,7 @@ public partial class SpawnMenu : Panel
 	{
 		Current = this;
 
-		StyleSheet.Load( "/ui/SpawnMenu.scss" );
+		StyleSheet.Load( "/ui/SpawnMenu/SpawnMenu.scss" );
 
 		var left = Add.Panel( "left" );
 		{
@@ -84,20 +84,7 @@ public partial class SpawnMenu : Panel
 
 		Parent.SetClass( "spawnmenuopen",
 			Input.Down( InputButton.Menu )
-			|| (InputFocus.Current is TextEntry && IsInsideSpawnMenu( InputFocus.Current )) );
-	}
-
-	bool IsInsideSpawnMenu( Panel p )
-	{
-		Panel parent = p.Parent;
-		while ( parent != null )
-		{
-			if ( parent == this ) return true;
-
-			parent = parent.Parent;
-		}
-
-		return false;
+			|| (InputFocus.Current is TextEntry && InputFocus.Current.IsDescendantOf( this )) );
 	}
 
 	//[Event.Hotload]

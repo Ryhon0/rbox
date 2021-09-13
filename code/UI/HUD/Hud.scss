@@ -52,7 +52,6 @@ rootpanel {
         transition: all 0.3s ease-out;
     }
 
-
     &.devcamera {
         display: none;
     }
@@ -65,6 +64,7 @@ InventoryBar {
     bottom: 48px;
     justify-content: center;
     align-items: flex-end;
+    z-index: 50;
 }
 
 InventoryIcon {
@@ -103,12 +103,14 @@ InventoryIcon {
         right: 5px;
     }
 
-    &.active {
+    &.active, &:hover {
         background-color: rgba( orange, 0.5 );
         transition: all 0.1s ease-out;
         width: 100px;
         height: 100px;
+    }
 
+    &.active {
         .slot-number {
             color: #275576;
         }

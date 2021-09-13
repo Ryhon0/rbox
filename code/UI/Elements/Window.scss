@@ -1,0 +1,103 @@
+﻿$background: #f8f8f8;
+$background-dark: #d0d0d0;
+$selected: #00c2ff;
+$font: #202020;
+$button: #a0a0a0;
+$button-color: #fff;
+$button-border: 1px solid #808080;
+$border: 1px solid #d0d0d0;
+$disabled: #808080;
+
+/*
+.tf2theme {
+    $background: #393532;
+    $background-dark: #221f1c;
+    $selected: #9d511b;
+    $font: #beb6a4;
+    $button: #a39884;
+    $button-color: $background-dark;
+    $button-border: 1px solid #8e8572;
+    $border: 1px solid #4d483e;
+    $disabled: #847a68;
+}
+*/
+
+
+Window {
+    box-shadow: 5px 5px 30px rgba( black, 0.8 );
+    border-radius: 2px;
+    position: absolute;
+    background-color: $background;
+    color: $font;
+    flex-direction: column;
+    resize: both;
+
+    .header {
+        justify-content: space-between;
+        padding: 6px;
+
+        &:active {
+            cursor: crosshair;
+        }
+
+        .close {
+            width: 16px;
+            height: 16px;
+            background-image-tint: $font;
+        }
+    }
+
+    .content {
+        flex-direction: column;
+        width: 100%;
+        overflow: hidden;
+        flex-grow: 0;
+        padding: 10px;
+        flex-grow: 1;
+    }
+
+    .bottom-bar {
+        flex-direction: row-reverse;
+        width: 100%;
+        height: 16px;
+        display: none;
+
+        &.visible {
+            display: flex;
+        }
+
+        .resize {
+            width: 16px;
+            height: 16px;
+            cursor: crosshair;
+            background-image-tint: $font;
+        }
+    }
+}
+
+.box {
+    flex-direction: column;
+    border: $border;
+}
+
+button {
+    background-color: $button;
+    color: $button-color;
+    padding: 5px;
+    margin-right: 1px;
+
+    &.disabled {
+        color: $disabled;
+    }
+}
+
+TextEntry {
+    background-color: $background-dark;
+    color: $font;
+    padding: 5px;
+    min-width: 100px;
+}
+
+.hidden {
+    display: none;
+}
