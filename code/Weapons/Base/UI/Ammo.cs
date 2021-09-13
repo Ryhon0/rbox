@@ -22,7 +22,11 @@ public class Ammo : Panel
 		var weapon = player.ActiveChild as Weapon;
 
 		SetClass("active", weapon != null);
-		if (weapon == null) return;
+		if ( weapon == null )
+		{
+			Weapon.Text = "";
+			return;
+		}
 
 		if (weapon.ClipSize == 1)
 		{
