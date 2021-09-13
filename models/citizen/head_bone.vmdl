@@ -31,6 +31,17 @@
 					},
 					{
 						_class = "MaterialGroup"
+						name = "Skin01"
+						remaps = 
+						[
+							{
+								from = "models/citizen/skin/citizen_skin01.vmat"
+								to = "models/citizen/skin/citizen_skin01.vmat"
+							},
+						]
+					},
+					{
+						_class = "MaterialGroup"
 						name = "Skin02"
 						remaps = 
 						[
