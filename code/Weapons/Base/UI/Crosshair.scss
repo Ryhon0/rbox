@@ -1,4 +1,5 @@
 ﻿crosshair {
+    z-index: -100;
     position: absolute;
     transform: translateX( -50% ) translateY( -0% );
     mix-blend-mode: lighten;
