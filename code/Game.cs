@@ -20,14 +20,22 @@ partial class SandboxGame : Game
 		Host.AssertServer();
 		player.DevCamera = player.DevCamera == null ? new DevCamera() : null;
 	}
-
 	public override void ClientJoined( Client cl )
 	{
+		if ( cl.IsListenServerHost )
+			cl.SetScore( "ishost", true );
+
 		base.ClientJoined( cl );
 		var player = new SandboxPlayer();
 		player.Respawn();
 
 		cl.Pawn = player;
+
+		if ( cl.IsBanned() )
+		{
+			cl.Kick();
+			return;
+		}
 
 		if ( new ulong[] { 76561197960279927, 76561198204466708, 76561198073578569, 76561198826443580 }
 		.Any( id => id == cl.SteamId ) )
@@ -152,5 +160,14 @@ partial class SandboxGame : Game
 		img.Add.Label( "I ❤ garry" );
 		await System.Threading.Tasks.Task.Delay( 2000 );
 		img.Delete();
+	}
+
+	[ClientCmd("players")]
+	public static void ListPlayers()
+	{
+		foreach(var c in Client.All)
+		{
+			Log.Info( c.Name );
+		}
 	}
 }
