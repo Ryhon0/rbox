@@ -68,8 +68,11 @@ public partial class PhysGun
 					child.GlowState = GlowStates.GlowStateOn;
 					child.GlowDistanceStart = 0;
 					child.GlowDistanceEnd = 1000;
-					child.GlowColor = (Owner as SandboxPlayer).PlayerColor;
 					child.GlowActive = true;
+
+					var color = (Owner as SandboxPlayer).PlayerColor;
+					color.WithAlpha(color.ToHsv().Value);
+					child.GlowColor = color;
 				}
 			}
 		}

@@ -19,7 +19,7 @@ partial class SandboxPlayer
 		{
 			for ( int i = 0; i < 4; i++ )
 				SetBodyGroup( i, 0 );
-			RenderAlpha = 0;
+			RenderColor = RenderColor.WithAlpha(0);
 		}
 		else
 		{
