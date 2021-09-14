@@ -8,8 +8,7 @@ public class TTSSettings : Panel
 	{
 		StyleSheet.Load( "UI/Chat/TTSSettings/TTSSettings.scss" );
 
-		var enable = new ConvarToggleButton( this, "tts_enabled", "1", "0" );
-		enable.Text = "Enable TTS";
+		var enable = new ConvarToggleButton( this, "Enable TTS", "tts_enabled", "1", "0" );
 
 		Add.Label( "Speed" );
 		var speed = new ConvarSlider( "sam_speed", 0, 255 );
@@ -27,8 +26,7 @@ public class TTSSettings : Panel
 		var mouth = new ConvarSlider( "sam_mouth", 0, 255 );
 		AddChild( mouth );
 
-		var sing = new ConvarToggleButton( this, "sam_sing", "1", "0" );
-		sing.Text = "Sing Mode";
+		var sing = new ConvarToggleButton( this,"Sing mode", "sam_sing", "1", "0" );
 
 		var reset = Add.Label( "Reset", "resetbutton" );
 		reset.AddEventListener( "OnClick", () =>
